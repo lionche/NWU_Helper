@@ -8,6 +8,7 @@ object BaseConstant {
     //登陆统一门户后,查询成绩
     const val SCORE_URL = "http://yjsxt.nwu.edu.cn/procedure/student/modifymidexam.htm"
 
+
     
 
 }

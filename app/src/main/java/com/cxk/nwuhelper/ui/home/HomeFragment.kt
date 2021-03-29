@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.che.haccp.ui.base.BaseViewFragment
-import com.cxk.nwuhelper.BaseConstant.LOGIN_URL_BASE
+import com.cxk.nwuhelper.BaseConstant.NWU_LOGIN_URL
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentHomeBinding
 import retrofit2.Call
@@ -18,7 +18,7 @@ class HomeFragment : BaseViewFragment<FragmentHomeBinding>() {
         super.onActivityCreated(savedInstanceState)
         binding.button.setOnClickListener {
             val retrofit = Retrofit.Builder()
-                .baseUrl(LOGIN_URL_BASE)
+                .baseUrl(NWU_LOGIN_URL)
 //                .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val appService = retrofit.create(AppService::class.java)
