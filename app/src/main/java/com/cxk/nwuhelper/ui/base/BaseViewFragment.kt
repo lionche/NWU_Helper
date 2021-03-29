@@ -20,4 +20,5 @@ abstract class BaseViewFragment<T:ViewDataBinding> :Fragment(){
     }
 
     abstract fun getSubLayoutId(): Int
+
 }

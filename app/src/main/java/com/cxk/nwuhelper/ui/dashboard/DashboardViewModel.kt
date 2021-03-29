@@ -3,14 +3,13 @@ package com.cxk.nwuhelper.ui.dashboard
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.cxk.nwuhelper.BaseConstant.LOGIN_URL
+import com.cxk.nwuhelper.BaseConstant.nuw_LOGIN_URL
 import com.cxk.nwuhelper.BaseConstant.SCORE_URL
 import com.cxk.nwuhelper.utils.encrypt
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
-import java.io.IOException
 
 class DashboardViewModel : ViewModel() {
 
@@ -49,7 +48,7 @@ class DashboardViewModel : ViewModel() {
     fun visitWebsite() {
         Log.d("chengji", "开始查询")
 
-        val connect: Connection = Jsoup.connect(LOGIN_URL)
+        val connect: Connection = Jsoup.connect(nuw_LOGIN_URL)
 //        connect.header(USER_AGENT, USER_AGENT_VALUE) // 配置模拟浏览器
         val response: Connection.Response = connect.execute()
         val cookies: Map<String, String> = response.cookies()
@@ -64,7 +63,7 @@ class DashboardViewModel : ViewModel() {
         val lt = stringStringMap["lt"]
         val execution = stringStringMap["execution"]
         val passwordAfterEncrypt = stringStringMap["password"]
-        val connect = Jsoup.connect(LOGIN_URL).cookies(cookies).followRedirects(false)
+        val connect = Jsoup.connect(nuw_LOGIN_URL).cookies(cookies).followRedirects(false)
         connect.data("username", n.value)
         connect.data("password", passwordAfterEncrypt)
         connect.data("lt", lt)

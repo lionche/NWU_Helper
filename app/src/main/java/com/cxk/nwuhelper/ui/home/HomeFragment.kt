@@ -1,31 +1,47 @@
 package com.cxk.nwuhelper.ui.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import android.util.Log
+import android.widget.Toast
+import com.che.haccp.ui.base.BaseViewFragment
+import com.cxk.nwuhelper.BaseConstant.LOGIN_URL_BASE
 import com.cxk.nwuhelper.R
+import com.cxk.nwuhelper.databinding.FragmentHomeBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseViewFragment<FragmentHomeBinding>() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        binding.button.setOnClickListener {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(LOGIN_URL_BASE)
+//                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val appService = retrofit.create(AppService::class.java)
+            appService.getAppData().enqueue(object : Callback<String> {
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    val webString = response.body()
+                    if (webString != null) {
+                        Log.d("webString", "onResponse: $webString")
+                    }
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        homeViewModel =
-                ViewModelProvider(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+                }
+
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    t.printStackTrace()
+                }
+
+            })
+        }
+        Toast.makeText(context, "hello", Toast.LENGTH_SHORT).show()
+
     }
+
+    override fun getSubLayoutId() = R.layout.fragment_home
 }
+
+
