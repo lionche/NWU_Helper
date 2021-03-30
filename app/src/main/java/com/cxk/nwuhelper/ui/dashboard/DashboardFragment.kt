@@ -19,8 +19,6 @@ class DashboardFragment : BaseVMFragment<FragmentDashboardBinding, DashboardView
         binding.lifecycleOwner = this
 
 
-
-
         viewModel.resultMap.observe(this, {
             it.let {
                 val intent = Intent(context, ScoreActivity::class.java)
