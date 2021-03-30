@@ -9,6 +9,7 @@ object BaseConstant {
     //登陆统一门户后,查询成绩
     const val SCORE_URL = "http://yjsxt.nwu.edu.cn/procedure/student/modifymidexam.htm"
     const val REST_URL = " http://jsonplaceholder.typicode.com"
+    const val SearchConnectDevice_URL = "http://10.16.0.12:8081/portal/api/v2/session/"
 
 
 
