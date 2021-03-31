@@ -9,7 +9,7 @@ import kotlin.coroutines.suspendCoroutine
 
 object NwuStudentNetwork {
 
-    private val sessionService = ServiceCreator.create<SessionService>()
+    private val sessionService = ServiceCreator.create<SearchDevicesService>()
     suspend fun searchDevices(authorization:String) = sessionService.searchDevices(authorization).await()
 
     private suspend fun <T> Call<T>.await(): T {
