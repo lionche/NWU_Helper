@@ -4,7 +4,7 @@ import android.util.Log
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentHomeBinding
 import com.cxk.nwuhelper.ui.base.BaseVMFragment
-import com.cxk.nwuhelper.ui.home.model.Session
+import com.cxk.nwuhelper.ui.home.model.SearchSessions
 
 class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
@@ -13,7 +13,7 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
         binding.lifecycleOwner = this
 
         viewModel.deviceLiveData.observe(this, { result ->
-            val sessionsList :ArrayList<Session> = result.getOrNull() as ArrayList<Session>
+            val sessionsList :ArrayList<SearchSessions> = result.getOrNull() as ArrayList<SearchSessions>
             viewModel.deviceList= sessionsList
             for (session in viewModel.deviceList) {
                 Log.d("test123", "\n设备类型: ${session.deviceType}\nip地址:${session.framed_ip_address}\nmac地址：${session.calling_station_id}\n设备码:${session.acct_unique_id}")
@@ -24,8 +24,7 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun initEvent() {
         binding.button.setOnClickListener {
-//            viewModel.searchDevices("a9e32cf5061f67602f3745170ca37381ad22449939e7dfd905ac583a57cc79d1d67fb2a5d5218769017b566f9ca0c74a15b92f4094c57ae9")
-            viewModel.searchDevices("a9e32cf5061f67602f3745170ca37381ad22449939e7dfd97f30e79e8a1295277c790b4339e74b17a3590857d744508886c4eb3033c9043c")
+            viewModel.searchDevices("a9e32cf5061f67602f3745170ca37381ad22449939e7dfd97f30e79e8a129527d17e1a7b6a96df6062ee34592c9742771c8864ecc74a8708")
         }
     }
 

@@ -1,6 +1,6 @@
 package com.cxk.nwuhelper.ui.home.model
 
-data class Session(
+data class SearchSessions(
     val acct_session_id: String,
     val acct_start_time: String,
     val acct_unique_id: String,

@@ -1,18 +1,18 @@
 package com.cxk.nwuhelper.ui.home
 
 import androidx.lifecycle.liveData
-import com.cxk.nwuhelper.ui.home.model.DeviceResponse
-import com.cxk.nwuhelper.ui.home.model.Session
+import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
+import com.cxk.nwuhelper.ui.home.model.SearchSessions
 import kotlinx.coroutines.Dispatchers
 
 object Repository {
     fun searchDevices(authorization: String) = liveData(Dispatchers.IO) {
         val result = try {
         val devicesResponse = NwuStudentNetwork.searchDevices(authorization)
-        val sessionsList: List<Session> = devicesResponse.sessions
+        val sessionsList: List<SearchSessions> = devicesResponse.searchSessions
         Result.success(sessionsList)
     } catch (e: Exception) {
-        Result.failure<DeviceResponse>(e)
+        Result.failure<SearchSessionsResponse>(e)
     }
         emit(result)
     }
