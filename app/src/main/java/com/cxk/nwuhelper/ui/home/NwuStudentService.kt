@@ -5,17 +5,22 @@ import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 //查询已链接的设备
-interface SearchDevicesService {
+interface NwuStudentService {
     //    @Headers("authorization:a9e32cf5061f67602f3745170ca37381ad22449939e7dfd905ac583a57cc79d1d67fb2a5d5218769017b566f9ca0c74a15b92f4094c57ae9")
     @GET("session/list")
     fun searchDevices(@Header("authorization") authorization: String): Call<SearchSessionsResponse>
-}
 
-interface LoginDevicesService {
-    //    @Headers("authorization:a9e32cf5061f67602f3745170ca37381ad22449939e7dfd905ac583a57cc79d1d67fb2a5d5218769017b566f9ca0c74a15b92f4094c57ae9")
+    @Headers("content-type: application/json")
     @POST("online?noCache=1616815924226")
     fun loginDevices(@Header("Content-Length") contextLength:String): Call<LoginSuccessResponse>
 }
+
+//interface LoginDevicesService {
+//    //    @Headers("authorization:a9e32cf5061f67602f3745170ca37381ad22449939e7dfd905ac583a57cc79d1d67fb2a5d5218769017b566f9ca0c74a15b92f4094c57ae9")
+//    @POST("online?noCache=1616815924226")
+//    fun loginDevices(@Header("Content-Length") contextLength:String): Call<LoginSuccessResponse>
+//}
