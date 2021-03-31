@@ -1,4 +1,4 @@
-package com.che.haccp.ui.base
+package com.cxk.nwuhelper.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

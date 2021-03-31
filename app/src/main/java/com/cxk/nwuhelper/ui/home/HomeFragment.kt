@@ -1,48 +1,38 @@
 package com.cxk.nwuhelper.ui.home
 
-import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import com.che.haccp.ui.base.BaseViewFragment
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentHomeBinding
-import com.cxk.nwuhelper.ui.base.ServiceCreator
-import com.cxk.nwuhelper.ui.home.model.DeviceList
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.cxk.nwuhelper.ui.base.BaseVMFragment
+import com.cxk.nwuhelper.ui.home.model.Session
 
-class HomeFragment : BaseViewFragment<FragmentHomeBinding>() {
+class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
+    override fun observerData() {
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        binding.lifecycleOwner = this
 
-        binding.button.setOnClickListener {
-            val searchConnectDeviceService = ServiceCreator.create<SearchConnectDeviceService>()
-            searchConnectDeviceService.getDeviceList("a9e32cf5061f67602f3745170ca37381ad22449939e7dfd905ac583a57cc79d1d67fb2a5d5218769017b566f9ca0c74a15b92f4094c57ae9")
-                .enqueue(object : Callback<DeviceList> {
-                    override fun onResponse(
-                        call: Call<DeviceList>,
-                        response: Response<DeviceList>
-                    ) {
-                        response.body()?.sessions?.let{
-                            for (session in  it){
-                                Log.d("test123", "" + session)
-                            }
-                        }
-                    }
-                    override fun onFailure(call: Call<DeviceList>, t: Throwable) {
-                        t.printStackTrace()
-                    }
-                })
-        }
-        Toast.makeText(context, "hello", Toast.LENGTH_SHORT).show()
-
+        viewModel.deviceLiveData.observe(this, { result ->
+            val sessionsList :ArrayList<Session> = result.getOrNull() as ArrayList<Session>
+            viewModel.deviceList= sessionsList
+            for (session in viewModel.deviceList) {
+                Log.d("test123", "\n设备类型: ${session.deviceType}\nip地址:${session.framed_ip_address}\nmac地址：${session.calling_station_id}\n设备码:${session.acct_unique_id}")
+            }
+        })
 
     }
 
-    override fun getSubLayoutId() = R.layout.fragment_home
-}
+    override fun initEvent() {
+        binding.button.setOnClickListener {
+//            viewModel.searchDevices("a9e32cf5061f67602f3745170ca37381ad22449939e7dfd905ac583a57cc79d1d67fb2a5d5218769017b566f9ca0c74a15b92f4094c57ae9")
+            viewModel.searchDevices("a9e32cf5061f67602f3745170ca37381ad22449939e7dfd97f30e79e8a1295277c790b4339e74b17a3590857d744508886c4eb3033c9043c")
+        }
+    }
 
+
+    override fun getSubLayoutId() = R.layout.fragment_home
+    override fun getSubVMClass() = HomeViewModel::class.java
+
+
+}
 

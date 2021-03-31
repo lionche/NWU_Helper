@@ -1,4 +1,4 @@
-package com.cxk.nwuhelper.ui.base
+package com.cxk.nwuhelper.ui.home
 
 import com.cxk.nwuhelper.BaseConstant.NWU_STUDENT_URL
 import retrofit2.Retrofit

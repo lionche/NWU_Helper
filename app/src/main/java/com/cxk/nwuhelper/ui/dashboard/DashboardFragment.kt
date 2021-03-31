@@ -2,13 +2,10 @@ package com.cxk.nwuhelper.ui.dashboard
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import com.che.haccp.ui.base.BaseVMFragment
-import com.cxk.nwuhelper.MyApplication
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.ScoreActivity
 import com.cxk.nwuhelper.databinding.FragmentDashboardBinding
+import com.cxk.nwuhelper.ui.base.BaseVMFragment
 import com.cxk.nwuhelper.utils.SerializableMap
 
 
