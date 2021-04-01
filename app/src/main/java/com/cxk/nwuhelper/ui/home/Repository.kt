@@ -12,7 +12,7 @@ object Repository {
         val sessionsList: List<SearchSessions> = devicesResponse.searchSessions
         Result.success(sessionsList)
     } catch (e: Exception) {
-        Result.failure<SearchSessions>(e)
+        Result.failure(e)
     }
         emit(result)
     }
