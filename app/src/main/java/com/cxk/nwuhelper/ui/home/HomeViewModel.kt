@@ -19,16 +19,6 @@ class HomeViewModel : ViewModel() {
     }
 
 
-//  private var loginDeviceLiveData = MutableLiveData<LoginPostBody>()
-//
-////    var deviceList = ArrayList<SearchSessions>()
-//
-//    val loginResponseLiveData = Transformations.switchMap(loginDeviceLiveData){loginPostBody ->
-//        Repository.loginDevices(loginPostBody)
-//    }
-//    fun loginDevices(loginPostBody: LoginPostBody) {
-//        loginDeviceLiveData.value = loginPostBody
-//    }
 
 
 
