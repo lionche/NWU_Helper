@@ -1,5 +1,6 @@
 package com.cxk.nwuhelper.ui.home
 
+import com.cxk.nwuhelper.ui.home.model.LoginPostBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -11,8 +12,9 @@ object NwuStudentNetwork {
 
     private val nwuStudentService = ServiceCreator.create<NwuStudentService>()
 
+
     suspend fun searchDevices(authorization:String) = nwuStudentService.searchDevices(authorization).await()
-//    suspend fun loginDevices(loginPostBody: LoginPostBody) = nwuStudentService.loginDevices(loginPostBody).await()
+    suspend fun loginDevices(loginPostBody: LoginPostBody) = nwuStudentService.loginDevice(loginPostBody).await()
 
     private suspend fun <T> Call<T>.await(): T {
         return suspendCoroutine { continuation ->

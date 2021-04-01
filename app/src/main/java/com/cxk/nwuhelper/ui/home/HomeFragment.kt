@@ -1,16 +1,10 @@
 package com.cxk.nwuhelper.ui.home
 
 import android.util.Log
-import com.cxk.nwuhelper.BaseConstant
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentHomeBinding
 import com.cxk.nwuhelper.ui.base.BaseVMFragment
-import com.cxk.nwuhelper.ui.home.model.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.cxk.nwuhelper.ui.home.model.SearchSessions
 
 
 class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
@@ -33,42 +27,28 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
                 Log.d("test123", "没有连接设备")
             }
         })
+        viewModel.loginLiveData.observe(this, { result ->
+            val loginFailResponse = result.getOrNull()
+            Log.d("test123","$loginFailResponse" )
+        })
     }
 
     override fun initEvent() {
 
-        val loginPostBody = LoginPostBody(
-            redirectUrl = "http://10.16.0.12:8081/?usermac=A0:99:9B:05:CB:2B&userip=10.17.65.9&origurl=http://edge.microsoft.com/captiveportal/generate_204&nasip=10.100.0.1",
-            webAuthPassword = "09005X",
-            webAuthUser = "202032908"
-        )
-//
-//        Log.d("test123", "initEvent: ${loginPostBody.redirectUrl.length}")
-//
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BaseConstant.NWU_STUDENT_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val service = retrofit.create(NwuStudentService::class.java)
-
-        service.getResult(loginPostBody).enqueue(object : Callback<LoginFailResponse> {
-            override fun onResponse(
-                call: Call<LoginFailResponse>,
-                response: Response<LoginFailResponse>
-            ) {
-                Log.d("test123", "onResponse: ${response.body()}")
-            }
-
-            override fun onFailure(call: Call<LoginFailResponse>, t: Throwable) {
-                t.printStackTrace()
-            }
-
-        })
 
 
-//        viewModel.searchDevices("a9e32cf5061f67602f3745170ca37381ad22449939e7dfd97f30e79e8a129527d17e1a7b6a96df6062ee34592c9742771c8864ecc74a8708")
+        binding.btnSearch.setOnClickListener{
+            Log.d("test123", "initEvent: 点击搜索设备")
+            viewModel.searchDevices(viewModel.authorization)
+        }
+
+        binding.btnLogin.setOnClickListener{
+            Log.d("test123", "initEvent: 点击登录")
+            viewModel.loginDevices(viewModel.loginPostBody)
+        }
+
     }
+
 
     override fun getSubLayoutId() = R.layout.fragment_home
     override fun getSubVMClass() = HomeViewModel::class.java

@@ -1,8 +1,6 @@
 package com.cxk.nwuhelper.ui.home
 
 import com.cxk.nwuhelper.ui.home.model.*
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -13,20 +11,13 @@ interface NwuStudentService {
     @GET("session/list")
     fun searchDevices(@Header("authorization") authorization: String): Call<SearchSessionsResponse>
 
-    @Headers("content-type: application/json")
-    @POST("online?noCache=1616815924226")
 
-    fun loginDevices(
-        @Header("Content-Length") contextLength: String,
-        @Body loginPostBody: LoginPostBody
-    ): Call<LoginSuccessResponse>
-
-
+//登录设备
     @Headers(
         "Content-Type: application/json",
-        "Content-Length: 145"
+//        "Content-Length: 125"
     )
-    @POST("online?noCache=1616815924226")
-    fun getResult(@Body loginPostBody: LoginPostBody): Call<LoginFailResponse>
+    @POST("online?noCache=1616815922222")
+    fun loginDevice(@Body loginPostBody: LoginPostBody): Call<LoginResponse>
 }
 

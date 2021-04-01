@@ -8,17 +8,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="查询设备"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="Hello"
-            />
+            app:layout_constraintVertical_bias="0.834" />
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="登录"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.689" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
