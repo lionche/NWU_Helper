@@ -1,12 +1,13 @@
 package com.cxk.nwuhelper.ui.home
 
+import com.cxk.nwuhelper.ui.home.model.LoginPostBody
 import com.cxk.nwuhelper.ui.home.model.LoginSuccessResponse
 import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
+
 
 //查询已链接的设备
 interface NwuStudentService {
@@ -16,7 +17,12 @@ interface NwuStudentService {
 
     @Headers("content-type: application/json")
     @POST("online?noCache=1616815924226")
-    fun loginDevices(@Header("Content-Length") contextLength:String): Call<LoginSuccessResponse>
+    fun getStringRequestBody(@Body body: RequestBody): Call<ResponseBody>
+
+    fun loginDevices(
+        @Header("Content-Length") contextLength: String,
+        @Body loginPostBody: LoginPostBody
+    ): Call<LoginSuccessResponse>
 }
 
 //interface LoginDevicesService {

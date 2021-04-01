@@ -19,12 +19,19 @@ class HomeViewModel : ViewModel() {
     }
 
 
-//    suspend fun getStudentDevice() {
-//        _deviceList.value = ServiceCreator.create<SearchConnectDeviceService>()
-//            .getDeviceList("a9e32cf5061f67602f3745170ca37381ad22449939e7dfd905ac583a57cc79d1d67fb2a5d5218769017b566f9ca0c74a15b92f4094c57ae9")
-//            .await()
+//  private var loginDeviceLiveData = MutableLiveData<LoginPostBody>()
 //
+////    var deviceList = ArrayList<SearchSessions>()
+//
+//    val loginResponseLiveData = Transformations.switchMap(loginDeviceLiveData){loginPostBody ->
+//        Repository.loginDevices(loginPostBody)
 //    }
+//    fun loginDevices(loginPostBody: LoginPostBody) {
+//        loginDeviceLiveData.value = loginPostBody
+//    }
+
+
+
 
 
 }
