@@ -15,6 +15,8 @@ object NwuStudentNetwork {
 
     suspend fun searchDevices(authorization:String) = nwuStudentService.searchDevices(authorization).await()
     suspend fun loginDevices(loginPostBody: LoginPostBody) = nwuStudentService.loginDevice(loginPostBody).await()
+    suspend fun deleteDevice(authorization:String,deviceId:String) = nwuStudentService.deleteDevice(authorization,deviceId).await()
+
 
     private suspend fun <T> Call<T>.await(): T {
         return suspendCoroutine { continuation ->

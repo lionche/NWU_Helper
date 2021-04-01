@@ -8,12 +8,12 @@ import kotlinx.coroutines.Dispatchers
 object Repository {
     fun searchDevices(authorization: String) = liveData(Dispatchers.IO) {
         val result = try {
-        val devicesResponse = NwuStudentNetwork.searchDevices(authorization)
-        val sessionsList: List<SearchSessions> = devicesResponse.searchSessions
-        Result.success(sessionsList)
-    } catch (e: Exception) {
-        Result.failure(e)
-    }
+            val devicesResponse = NwuStudentNetwork.searchDevices(authorization)
+            val sessionsList: List<SearchSessions> = devicesResponse.searchSessions
+            Result.success(sessionsList)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
         emit(result)
     }
 
@@ -21,6 +21,16 @@ object Repository {
         val result = try {
             val loginResponse = NwuStudentNetwork.loginDevices(loginPostBody)
             Result.success(loginResponse)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+        emit(result)
+    }
+
+    fun deleteDevice(authorization:String,deviceId:String) = liveData(Dispatchers.IO) {
+        val result = try {
+            val deleteResponse = NwuStudentNetwork.deleteDevice(authorization,deviceId)
+            Result.success(deleteResponse)
         } catch (e: Exception) {
             Result.failure(e)
         }

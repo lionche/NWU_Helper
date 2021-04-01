@@ -14,32 +14,54 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
         viewModel.deviceLiveData.observe(this, { result ->
             val sessionsList = result.getOrNull()
-            if (sessionsList != null) {
-                viewModel.deviceList = sessionsList as ArrayList<SearchSessions>
+            sessionsList?.let {
+                viewModel.deviceList = it as ArrayList<SearchSessions>
                 for (session in viewModel.deviceList) {
                     Log.d(
                         "test123",
                         "\n设备类型: ${session.deviceType}\nip地址:${session.framed_ip_address}\nmac地址：${session.calling_station_id}\n设备码:${session.acct_unique_id}"
                     )
                 }
-            } else {
+            } ?: let {
                 Log.d("test123", "没有连接设备")
             }
         })
         viewModel.loginLiveData.observe(this, { result ->
-            val loginFailResponse = result.getOrNull()
-            Log.d("test123","$loginFailResponse" )
+            result.getOrNull()?.apply {
+                if (this.statusCode == 200) {
+                    Log.d("test123", "登陆成功,token:${this.token}")
+                } else {
+                    Log.d("test123", "登陆失败:原因:${this.errorDescription}")
+                }
+            }
         })
+        viewModel.deleteLiveData.observe(this,
+            { result ->
+                result.getOrNull()?.let { Log.d("test123", "删除成功") }
+                    ?: let {
+                        Log.d(
+                            "test123",
+                            "设备码或者token错误"
+                        )
+                    }
+
+            })
     }
 
     override fun initEvent() {
-        binding.btnSearch.setOnClickListener{
+        binding.btnSearch.setOnClickListener {
             Log.d("test123", "initEvent: 点击搜索设备")
             viewModel.searchDevices(viewModel.authorization)
+
         }
-        binding.btnLogin.setOnClickListener{
+        binding.btnLogin.setOnClickListener {
             Log.d("test123", "initEvent: 点击登录")
             viewModel.loginDevices(viewModel.loginPostBody)
+
+        }
+        binding.btnDelete.setOnClickListener {
+            Log.d("test123", "initEvent: 点击删除")
+            viewModel.deleteDevice(viewModel.authorization, viewModel.deviceId)
         }
     }
 
