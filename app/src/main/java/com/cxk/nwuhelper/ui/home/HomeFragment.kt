@@ -49,20 +49,20 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initEvent() {
-        binding.btnSearch.setOnClickListener {
-            Log.d("test123", "initEvent: 点击搜索设备")
-            viewModel.searchDevices(viewModel.authorization)
-
-        }
-        binding.btnLogin.setOnClickListener {
-            Log.d("test123", "initEvent: 点击登录")
-            viewModel.loginDevices(viewModel.loginPostBody)
-
-        }
-        binding.btnDelete.setOnClickListener {
-            Log.d("test123", "initEvent: 点击删除")
-            viewModel.deleteDevice(viewModel.authorization, viewModel.deviceId)
-        }
+//        binding.btnSearch.setOnClickListener {
+//            Log.d("test123", "initEvent: 点击搜索设备")
+//            viewModel.searchDevices(viewModel.authorization)
+//
+//        }
+//        binding.btnLogin.setOnClickListener {
+//            Log.d("test123", "initEvent: 点击登录")
+//            viewModel.loginDevices(viewModel.loginPostBody)
+//
+//        }
+//        binding.btnDelete.setOnClickListener {
+//            Log.d("test123", "initEvent: 点击删除")
+//            viewModel.deleteDevice(viewModel.authorization, viewModel.deviceId)
+//        }
     }
 
     override fun getSubLayoutId() = R.layout.fragment_home

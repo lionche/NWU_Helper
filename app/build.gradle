@@ -70,6 +70,14 @@ dependencies {
     //blankj安卓工具
     implementation 'com.blankj:utilcodex:1.30.6'
 
+    //登陆按键动画
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
+    //对勾动画
+    implementation 'com.github.ChengangFeng:TickView:v1.0.2'
+
+
+
 
 
 }
