@@ -67,5 +67,9 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
 
+    //blankj安卓工具
+    implementation 'com.blankj:utilcodex:1.30.6'
+
+
 
 }

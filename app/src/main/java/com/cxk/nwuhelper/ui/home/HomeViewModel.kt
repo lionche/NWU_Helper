@@ -28,7 +28,7 @@ class HomeViewModel : ViewModel() {
     //##########################################################################################################################################################
     val loginPostBody = LoginPostBody(
         redirectUrl = "http://10.16.0.12:8081/?usermac=XX:XX:XX:XX:XX:XX&userip=10.17.93.45&origurl=http://edge.microsoft.com/captiveportal/generate_204&nasip=10.100.0.1",
-        webAuthPassword = "09005X1",
+        webAuthPassword = "09005X",
         webAuthUser = "202032908"
     )
 
