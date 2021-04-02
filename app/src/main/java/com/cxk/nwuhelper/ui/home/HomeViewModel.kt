@@ -4,13 +4,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.cxk.nwuhelper.ui.home.model.LoginPostBody
-import com.cxk.nwuhelper.ui.home.model.SearchSessions
+import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
 
 class HomeViewModel : ViewModel() {
 
+
+
+
+
     private var searchDeviceLiveData = MutableLiveData<String>()
 
-    var deviceList = ArrayList<SearchSessions>()
+    var deviceList = ArrayList<SearchSessionsResponse.SearchSessions>()
 
     val deviceLiveData = Transformations.switchMap(searchDeviceLiveData) { authorization ->
         Repository.searchDevices(authorization)
@@ -22,7 +26,6 @@ class HomeViewModel : ViewModel() {
 
     val authorization =
         "c1a3ef1ddf30bc41373b19bbb830c470f7522a72bff5057e57f92dea92f661ed1a47143bb07c36c5ffc1f238c68109202c1f59482b215a0e"
-
 
     //##########################################################################################################################################################
     //##########################################################################################################################################################

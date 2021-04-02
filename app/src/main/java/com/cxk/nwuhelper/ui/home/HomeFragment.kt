@@ -4,7 +4,7 @@ import android.util.Log
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentHomeBinding
 import com.cxk.nwuhelper.ui.base.BaseVMFragment
-import com.cxk.nwuhelper.ui.home.model.SearchSessions
+import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
 
 class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
@@ -15,7 +15,7 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
         viewModel.deviceLiveData.observe(this, { result ->
             val sessionsList = result.getOrNull()
             sessionsList?.let {
-                viewModel.deviceList = it as ArrayList<SearchSessions>
+                viewModel.deviceList = it as ArrayList<SearchSessionsResponse.SearchSessions>
                 for (session in viewModel.deviceList) {
                     Log.d(
                         "test123",
@@ -49,11 +49,11 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initEvent() {
-//        binding.btnSearch.setOnClickListener {
-//            Log.d("test123", "initEvent: 点击搜索设备")
-//            viewModel.searchDevices(viewModel.authorization)
-//
-//        }
+        binding.mushroom.setOnClickListener {
+            Log.d("test123", "initEvent: 点击搜索设备")
+            viewModel.searchDevices(viewModel.authorization)
+
+        }
 //        binding.btnLogin.setOnClickListener {
 //            Log.d("test123", "initEvent: 点击登录")
 //            viewModel.loginDevices(viewModel.loginPostBody)
