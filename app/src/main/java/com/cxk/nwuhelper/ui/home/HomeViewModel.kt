@@ -3,6 +3,7 @@ package com.cxk.nwuhelper.ui.home
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.cxk.nwuhelper.ui.home.model.DeleteBean
 import com.cxk.nwuhelper.ui.home.model.LoginPostBody
 import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
 
@@ -51,20 +52,15 @@ class HomeViewModel : ViewModel() {
 
     val deviceId =
         "radius:acct:35cb8667-2649-4af3-86b7-854194219302:xx:b1bb841cbb342222ce6eb592d6cb6185"
-    private val deleteDeviceLiveData = MutableLiveData<MutableMap<String, String>>()
+    private val deleteDeviceLiveData = MutableLiveData<DeleteBean>()
 
-    private val deleteMap: MutableMap<String, String> = HashMap()
 
     val deleteLiveData = Transformations.switchMap(deleteDeviceLiveData) {
-        val authorization = it[authorization]
-        val deviceId = it[deviceId]
-        Repository.deleteDevice(authorization!!, deviceId!!)
+        Repository.deleteDevice(it.authorization,it.deviceId)
     }
 
     fun deleteDevice(authorization: String, deviceId: String) {
-        deleteMap[authorization] = authorization
-        deleteMap[deviceId] = deviceId
-        deleteDeviceLiveData.value = deleteMap
+        val deleteBean = DeleteBean(authorization,deviceId)
     }
 
 
