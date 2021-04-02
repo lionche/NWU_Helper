@@ -15,7 +15,7 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
         viewModel.deviceLiveData.observe(this, { result ->
             val sessionsList = result.getOrNull()
             sessionsList?.let {
-                viewModel.deviceList = it as ArrayList<SearchSessionsResponse.SearchSessions>
+                viewModel.deviceList = it as ArrayList<SearchSessionsResponse.Sessions>
                 for (session in viewModel.deviceList) {
                     Log.d(
                         "test123",

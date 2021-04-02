@@ -3,12 +3,12 @@ package com.cxk.nwuhelper.ui.home.model
 data class LoginResponse(
     val createdAt: Int,
     val error: Int,
-    val session: LoginSuccessSession,
+    val session: Session,
     val statusCode: Int,
     val token: String,
     val truncated: Boolean,
     val errorDescription: String){
-    data class LoginSuccessSession(
+    data class Session(
         val context: String,
         val id: String,
         val keepalive: Boolean,
