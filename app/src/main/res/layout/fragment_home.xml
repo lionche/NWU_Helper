@@ -107,7 +107,7 @@
 
 
         <com.github.ybq.android.spinkit.SpinKitView
-            android:id="@+id/progress"
+            android:id="@+id/progress_bar"
             style="@style/SpinKitView.Large.Circle"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -130,7 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="visible"
+            android:visibility="gone"
             app:check_base_color="?attr/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

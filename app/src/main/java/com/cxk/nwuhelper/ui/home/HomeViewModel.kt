@@ -13,6 +13,8 @@ class HomeViewModel : ViewModel() {
 
 
 
+
+
     private var searchDeviceLiveData = MutableLiveData<String>()
 
     var deviceList = ArrayList<SearchSessionsResponse.Sessions>()

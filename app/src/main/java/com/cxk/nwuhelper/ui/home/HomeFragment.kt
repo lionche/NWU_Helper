@@ -5,10 +5,13 @@ import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentHomeBinding
 import com.cxk.nwuhelper.ui.base.BaseVMFragment
 import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
+import com.github.ybq.android.spinkit.sprite.Sprite
+import com.github.ybq.android.spinkit.style.DoubleBounce
 
 class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun observerData() {
+        Log.d("test123", "observerData: fragment1")
 
         binding.lifecycleOwner = this
 
@@ -35,17 +38,20 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
                 }
             }
         })
-        viewModel.deleteLiveData.observe(this,
-            { result ->
-                result.getOrNull()?.let { Log.d("test123", "删除成功") }
-                    ?: let {
-                        Log.d(
-                            "test123",
-                            "设备码或者token错误"
-                        )
-                    }
+        viewModel.deleteLiveData.observe(this, { result ->
+            result.getOrNull()?.let { Log.d("test123", "删除成功") }
+                ?: let {
+                    Log.d(
+                        "test123",
+                        "设备码或者token错误"
+                    )
+                }
 
-            })
+        })
+
+        //设置过度动画特效
+        val doubleBounce: Sprite = DoubleBounce()
+        binding.progressBar.setIndeterminateDrawable(doubleBounce)
     }
 
     override fun initEvent() {
