@@ -13,9 +13,8 @@ import org.jsoup.select.Elements
 
 class DashboardViewModel : ViewModel() {
 
-    var n = MutableLiveData<String>()
+    var n = MutableLiveData("")
 
-//    val n = MutableLiveData()
     val p = MutableLiveData("")
     val enable = MutableLiveData(false)
     val resultMap = MutableLiveData<MutableMap<String, String>>()
@@ -24,7 +23,6 @@ class DashboardViewModel : ViewModel() {
     private fun judgeEnable() {
         enable.value = n.value!!.isNotEmpty() && p.value!!.isNotEmpty()
         Log.d("password", "judgeEnable: ${enable.value}")
-
     }
 
     fun onPwdChanged(s: CharSequence, start: Int, before: Int, count: Int) {

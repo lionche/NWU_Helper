@@ -1,6 +1,10 @@
 package com.cxk.nwuhelper.ui.home
 
+import android.app.AlertDialog
 import android.util.Log
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.Toast
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentHomeBinding
 import com.cxk.nwuhelper.ui.base.BaseVMFragment
@@ -11,9 +15,39 @@ import com.github.ybq.android.spinkit.style.DoubleBounce
 class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun observerData() {
-        Log.d("test123", "observerData: fragment1")
-
+        binding.model = viewModel
         binding.lifecycleOwner = this
+
+        viewModel.buttonState.observe(this, {
+            when (it) {
+                "wifi_available" -> {
+                    binding.progressBar.visibility = GONE
+                    binding.btnLogin.visibility = VISIBLE
+                    binding.btnLogin.setIconResource(R.drawable.ic_baseline_arrow_forward_24)
+                }
+                "wifi_not_available" -> {
+                    binding.progressBar.visibility = GONE
+                    binding.btnLogin.visibility = VISIBLE
+                    binding.btnLogin.setIconResource(R.drawable.ic_baseline_wifi_24)
+                }
+                "wrong_password" -> {
+                    binding.progressBar.visibility = GONE
+                    binding.btnLogin.visibility = VISIBLE
+                    binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
+                }
+                "login_success" -> {
+                    binding.progressBar.visibility = GONE
+                    binding.btnLogin.visibility = GONE
+                    binding.btnSuccess.apply {
+                        visibility = VISIBLE
+                        isChecked = true
+                        isClickable = false
+                    }
+
+
+                }
+            }
+        })
 
         viewModel.deviceLiveData.observe(this, { result ->
             val sessionsList = result.getOrNull()
@@ -31,9 +65,38 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
         })
         viewModel.loginLiveData.observe(this, { result ->
             result.getOrNull()?.apply {
+                Log.d("test123", "token:$token")
+                viewModel.authorization.value = token
+
                 if (this.statusCode == 200) {
-                    Log.d("test123", "登陆成功,token:${this.token}")
+                    Log.d("test123", "登陆成功")
+                    viewModel.buttonState.value = "login_success"
                 } else {
+                    this.errorDescription.apply {
+                        when (this.first()) {
+                            //pc already have 2 sessions
+                            'p' -> {
+                                Toast.makeText(requireActivity(), "已登陆2台设备", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                            //invalid username or password
+                            'i' -> {
+                                Toast.makeText(requireActivity(), "用户名或密码错误", Toast.LENGTH_SHORT)
+                                    .show()
+                                viewModel.buttonState.value = "wrong_password"
+                            }
+
+                            //NAS no response
+                            'N' -> {
+                                Toast.makeText(requireActivity(), "是不是连错网了", Toast.LENGTH_SHORT)
+                                    .show()
+                                viewModel.buttonState.value = "wifi_not_available"
+
+                            }
+
+                        }
+
+                    }
                     Log.d("test123", "登陆失败:原因:${this.errorDescription}")
                 }
             }
@@ -55,10 +118,34 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initEvent() {
+
+        viewModel.netCheck()
+
         binding.mushroom.setOnClickListener {
             Log.d("test123", "initEvent: 点击搜索设备")
-            viewModel.searchDevices(viewModel.authorization)
+            AlertDialog.Builder(requireContext()).apply {
+                setTitle("title")
+                setMessage("message")
+                setCancelable(false)
+                setPositiveButton("ok") { dialog, which ->
+                }
+                setNeutralButton("Cancel") { dialog, which ->
+                }
+                show()
+            }
 
+            viewModel.authorization.value?.let { viewModel.searchDeviceLiveData.value = it }
+        }
+
+        binding.mushroom.setOnLongClickListener {
+            Log.d("test123", "initEvent: 点击删除设备")
+            viewModel.authorization.value?.let {
+                viewModel.deleteDevice(
+                    it,
+                    viewModel.deviceList[0].acct_unique_id
+                )
+            }
+            true
         }
 //        binding.btnLogin.setOnClickListener {
 //            Log.d("test123", "initEvent: 点击登录")
