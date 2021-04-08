@@ -11,6 +11,9 @@ import com.cxk.nwuhelper.ui.base.BaseVMFragment
 import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
 import com.github.ybq.android.spinkit.sprite.Sprite
 import com.github.ybq.android.spinkit.style.DoubleBounce
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
@@ -31,12 +34,9 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
                     binding.btnLogin.setIconResource(R.drawable.ic_baseline_wifi_24)
                 }
                 "wrong_password" -> {
-                    binding.progressBar.visibility = GONE
-                    binding.btnLogin.visibility = VISIBLE
                     binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
                 }
                 "login_success" -> {
-                    binding.progressBar.visibility = GONE
                     binding.btnLogin.visibility = GONE
                     binding.btnSuccess.apply {
                         visibility = VISIBLE
@@ -78,6 +78,7 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
                             'p' -> {
                                 Toast.makeText(requireActivity(), "已登陆2台设备", Toast.LENGTH_SHORT)
                                     .show()
+                                showDialog()
                             }
                             //invalid username or password
                             'i' -> {
@@ -127,16 +128,7 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
             viewModel.authorization.value?.let {
                 viewModel.searchDeviceLiveData.value = it
-                AlertDialog.Builder(requireContext()).apply {
-                    setTitle("title")
-                    setMessage("message")
-                    setCancelable(false)
-                    setPositiveButton("ok") { dialog, which ->
-                    }
-                    setNeutralButton("Cancel") { dialog, which ->
-                    }
-                    show()
-                }
+                showDialog()
             }?:let {
                 Toast.makeText(
                     requireContext(),
@@ -168,6 +160,38 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun getSubLayoutId() = R.layout.fragment_home
     override fun getSubVMClass() = HomeViewModel::class.java
+
+    private fun showDialog(){
+        val colors = viewModel.deviceList.map{ it.deviceType }.toTypedArray()
+
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle("放弃设备")
+            setCancelable(false)
+            setNeutralButton("Cancel") { dialog, which -> }
+
+            for(item in colors){
+                Log.e("duihuakuang", "showDialog: $item")
+            }
+//            val colors = arrayOf("红色", "橙色", "黄色", "绿色", "蓝色", "靛色", "紫色")
+            val myColors: MutableList<String> = ArrayList()
+//            val myColors = ArrayList<SearchSessionsResponse.Sessions>()
+            setMultiChoiceItems(colors, null) { dialog, which, isChecked ->
+                if (isChecked) {
+                    myColors.add(colors[which])
+                } else {
+                    myColors.remove(colors[which])
+                }
+            }
+            setPositiveButton("确认") { dialog, which ->
+                for (color in myColors) {
+                    Log.e("duihuakuang", "选择的颜色：$color")
+                }
+
+            }
+            show()
+        }
+
+    }
 
 
 }
