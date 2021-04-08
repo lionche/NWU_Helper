@@ -122,19 +122,27 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
         viewModel.netCheck()
 
         binding.mushroom.setOnClickListener {
-            Log.d("test123", "initEvent: 点击搜索设备")
-            AlertDialog.Builder(requireContext()).apply {
-                setTitle("title")
-                setMessage("message")
-                setCancelable(false)
-                setPositiveButton("ok") { dialog, which ->
-                }
-                setNeutralButton("Cancel") { dialog, which ->
-                }
-                show()
-            }
+//            Log.d("test123", "initEvent: 点击搜索设备")
 
-            viewModel.authorization.value?.let { viewModel.searchDeviceLiveData.value = it }
+
+            viewModel.authorization.value?.let {
+                viewModel.searchDeviceLiveData.value = it
+                AlertDialog.Builder(requireContext()).apply {
+                    setTitle("title")
+                    setMessage("message")
+                    setCancelable(false)
+                    setPositiveButton("ok") { dialog, which ->
+                    }
+                    setNeutralButton("Cancel") { dialog, which ->
+                    }
+                    show()
+                }
+            }?:let {
+                Toast.makeText(
+                    requireContext(),
+                    "请先登陆",
+                    Toast.LENGTH_SHORT
+                ).show() }
         }
 
         binding.mushroom.setOnLongClickListener {

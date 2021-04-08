@@ -59,14 +59,26 @@ class HomeViewModel : ViewModel() {
                     .substring(serverAddressLocation1 + 16, serverAddressLocation2)
 
 
-                Log.e("test123", "ip地址:$ipAddress,服务器地址:$serverAddress")
+//                Log.e("test123", "ip地址:$ipAddress,服务器地址:$serverAddress")
+//                Toast.makeText(context, "ip地址:$ipAddress,服务器地址:$serverAddress", Toast.LENGTH_SHORT).show()
 
-                if(ipAddress.startsWith("10") or ipAddress.startsWith("192")){
-                    Toast.makeText(context, "ip地址:$ipAddress,服务器地址:$serverAddress", Toast.LENGTH_SHORT).show()
-                    buttonState.postValue("wifi_available")
-                }else{
+                when(serverAddress.split('.')[0]){
+                    "10" ->{
+//                        Toast.makeText(context, "ip地址:$ipAddress,服务器地址:$serverAddress", Toast.LENGTH_SHORT).show()
+                        buttonState.postValue("wifi_available")
+                    }
+                    "172" ->{
+                        Toast.makeText(context, "暂时不支持NWUNET", Toast.LENGTH_SHORT).show()
+                        buttonState.postValue("wifi_not_available")
+                    }
+                    "192" ->{
+                        Toast.makeText(context, "暂时不支持路由器", Toast.LENGTH_SHORT).show()
+                        buttonState.postValue("wifi_not_available")
+                    }else ->{
                     Toast.makeText(context, "请连接校园网", Toast.LENGTH_SHORT).show()
                     buttonState.postValue("wifi_not_available")
+                    }
+
                 }
 
             }
