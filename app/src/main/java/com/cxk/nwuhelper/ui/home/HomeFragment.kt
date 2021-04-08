@@ -11,8 +11,6 @@ import com.cxk.nwuhelper.ui.base.BaseVMFragment
 import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
 import com.github.ybq.android.spinkit.sprite.Sprite
 import com.github.ybq.android.spinkit.style.DoubleBounce
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
@@ -28,16 +26,29 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
                     binding.btnLogin.visibility = VISIBLE
                     binding.btnLogin.setIconResource(R.drawable.ic_baseline_arrow_forward_24)
                 }
+                "start_to_login" -> {
+                    binding.btnLogin.visibility = GONE
+                    binding.progressBar.visibility = VISIBLE
+                }
                 "wifi_not_available" -> {
                     binding.progressBar.visibility = GONE
                     binding.btnLogin.visibility = VISIBLE
                     binding.btnLogin.setIconResource(R.drawable.ic_baseline_wifi_24)
                 }
                 "wrong_password" -> {
+                    binding.btnLogin.visibility = VISIBLE
+                    binding.progressBar.visibility = GONE
+                    binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
+                }
+                "2_devices" -> {
+                    viewModel.searchDeviceLiveData.value = viewModel.authorization.value
+                    binding.btnLogin.visibility = VISIBLE
+                    binding.progressBar.visibility = GONE
                     binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
                 }
                 "login_success" -> {
-                    binding.btnLogin.visibility = GONE
+                    binding.progressBar.visibility = GONE
+                    binding.btnSuccess.visibility = VISIBLE
                     binding.btnSuccess.apply {
                         visibility = VISIBLE
                         isChecked = true
@@ -52,13 +63,8 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
         viewModel.deviceLiveData.observe(this, { result ->
             val sessionsList = result.getOrNull()
             sessionsList?.let {
-                viewModel.deviceList = it as ArrayList<SearchSessionsResponse.Sessions>
-                for (session in viewModel.deviceList) {
-                    Log.d(
-                        "test123",
-                        "\n设备类型: ${session.deviceType}\nip地址:${session.framed_ip_address}\nmac地址：${session.calling_station_id}\n设备码:${session.acct_unique_id}"
-                    )
-                }
+//                viewModel.deviceList = it as ArrayList<SearchSessionsResponse.Sessions>
+                showDialog(it)
             } ?: let {
                 Log.d("test123", "没有连接设备")
             }
@@ -70,6 +76,7 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
                 if (this.statusCode == 200) {
                     Log.d("test123", "登陆成功")
+                    Toast.makeText(requireActivity(), "登陆成功啦", Toast.LENGTH_SHORT).show()
                     viewModel.buttonState.value = "login_success"
                 } else {
                     this.errorDescription.apply {
@@ -78,7 +85,8 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
                             'p' -> {
                                 Toast.makeText(requireActivity(), "已登陆2台设备", Toast.LENGTH_SHORT)
                                     .show()
-                                showDialog()
+                                viewModel.buttonState.value = "2_devices"
+
                             }
                             //invalid username or password
                             'i' -> {
@@ -119,34 +127,35 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initEvent() {
-
+        /**
+         * 检测是否连接校园网
+         */
         viewModel.netCheck()
 
         binding.mushroom.setOnClickListener {
 //            Log.d("test123", "initEvent: 点击搜索设备")
 
-
             viewModel.authorization.value?.let {
                 viewModel.searchDeviceLiveData.value = it
-                showDialog()
-            }?:let {
+            } ?: let {
                 Toast.makeText(
                     requireContext(),
                     "请先登陆",
                     Toast.LENGTH_SHORT
-                ).show() }
+                ).show()
+            }
         }
 
-        binding.mushroom.setOnLongClickListener {
-            Log.d("test123", "initEvent: 点击删除设备")
-            viewModel.authorization.value?.let {
-                viewModel.deleteDevice(
-                    it,
-                    viewModel.deviceList[0].acct_unique_id
-                )
-            }
-            true
-        }
+//        binding.mushroom.setOnLongClickListener {
+//            Log.d("test123", "initEvent: 点击删除设备")
+//            viewModel.authorization.value?.let {
+////                viewModel.deleteDevice(
+////                    it,
+////                    viewModel.deviceList[0].acct_unique_id
+////                )
+//            }
+//            true
+//        }
 //        binding.btnLogin.setOnClickListener {
 //            Log.d("test123", "initEvent: 点击登录")
 //            viewModel.loginDevices(viewModel.loginPostBody)
@@ -161,31 +170,36 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun getSubLayoutId() = R.layout.fragment_home
     override fun getSubVMClass() = HomeViewModel::class.java
 
-    private fun showDialog(){
-        val colors = viewModel.deviceList.map{ it.deviceType }.toTypedArray()
+    private fun showDialog(list: List<SearchSessionsResponse.Sessions>) {
+        val loginDevices = list.map { it.deviceType }.toTypedArray()
 
         AlertDialog.Builder(requireContext()).apply {
             setTitle("放弃设备")
             setCancelable(false)
-            setNeutralButton("Cancel") { dialog, which -> }
+            setNeutralButton("离开") { dialog, which -> }
 
-            for(item in colors){
-                Log.e("duihuakuang", "showDialog: $item")
+            for (item in loginDevices) {
+                Log.e("test123", "showDialog: $item")
             }
-//            val colors = arrayOf("红色", "橙色", "黄色", "绿色", "蓝色", "靛色", "紫色")
-            val myColors: MutableList<String> = ArrayList()
-//            val myColors = ArrayList<SearchSessionsResponse.Sessions>()
-            setMultiChoiceItems(colors, null) { dialog, which, isChecked ->
+            val selectDevices: MutableList<Int> = ArrayList()
+            setMultiChoiceItems(loginDevices, null) { dialog, which, isChecked ->
                 if (isChecked) {
-                    myColors.add(colors[which])
+                    selectDevices.add(which)
                 } else {
-                    myColors.remove(colors[which])
+                    selectDevices.remove(which)
                 }
             }
             setPositiveButton("确认") { dialog, which ->
-                for (color in myColors) {
-                    Log.e("duihuakuang", "选择的颜色：$color")
+                for (deviceIndex in selectDevices) {
+                    viewModel.deleteDevice(
+                        viewModel.authorization.value!!, list.map { it.acct_unique_id }[deviceIndex]
+                    )
+                    Log.e("test123", "选择放弃的设备：${loginDevices[deviceIndex]}")
                 }
+                if (selectDevices.size!=0) {
+                    viewModel.loginNwuStudent()
+                }
+
 
             }
             show()

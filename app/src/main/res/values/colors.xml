@@ -13,5 +13,7 @@
     <color name="forest_logo_btn_bg">#8BC230</color>
     <color name="forest_navigation_back_bg">#204136</color>
     <color name="transp">#00000000</color>
-
+    <color name="mushroom">#FDCFAD</color>
+    <color name="mushroom_back">#32F2E1D6</color>
+    <color name="mushroom_background">#F2E1D6</color>
 </resources>

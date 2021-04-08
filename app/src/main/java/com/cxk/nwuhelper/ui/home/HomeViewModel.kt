@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel
 import com.cxk.nwuhelper.MyApplication.Companion.context
 import com.cxk.nwuhelper.ui.home.model.DeleteBean
 import com.cxk.nwuhelper.ui.home.model.LoginPostBody
-import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
 
 class HomeViewModel : ViewModel() {
 
@@ -97,8 +96,10 @@ class HomeViewModel : ViewModel() {
 
     var searchDeviceLiveData = MutableLiveData<String>()
 
-    var deviceList = ArrayList<SearchSessionsResponse.Sessions>()
-
+//    var deviceList = ArrayList<SearchSessionsResponse.Sessions>()
+    /**
+     * 登陆设备检查
+     */
     val deviceLiveData = Transformations.switchMap(searchDeviceLiveData) { authorization ->
         Repository.searchDevices(authorization)
     }
@@ -131,8 +132,9 @@ class HomeViewModel : ViewModel() {
     }
 
 
-
-
+    /**
+     * 登陆校园网
+     */
     fun loginNwuStudent() {
         //根据ip修改连接
         var url =
@@ -145,6 +147,8 @@ class HomeViewModel : ViewModel() {
             webAuthPassword = password.value!!
         )
         loginDevices(loginPostBody)
+        buttonState.value = "start_to_login"
+
     }
 
     private var loginDeviceLiveData = MutableLiveData<LoginPostBody>()
