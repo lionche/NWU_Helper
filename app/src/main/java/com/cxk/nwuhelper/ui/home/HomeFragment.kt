@@ -9,8 +9,10 @@ import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentHomeBinding
 import com.cxk.nwuhelper.ui.base.BaseVMFragment
 import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
+import com.cxk.nwuhelper.utils.showToast
 import com.github.ybq.android.spinkit.sprite.Sprite
 import com.github.ybq.android.spinkit.style.DoubleBounce
+import java.lang.Thread.sleep
 
 
 class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
@@ -23,27 +25,39 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
             when (it) {
                 "wifi_available" -> {
                     binding.progressBar.visibility = GONE
+                    binding.btnSuccess.visibility = GONE
                     binding.btnLogin.visibility = VISIBLE
                     binding.btnLogin.setIconResource(R.drawable.ic_baseline_arrow_forward_24)
+                    viewModel.netAvailable.value = true
+                    Log.d("password", "fragmentpost后: ${viewModel.netAvailable.value}")
+                    viewModel.judgeEnable()
+
+
                 }
                 "start_to_login" -> {
                     binding.btnLogin.visibility = GONE
+                    binding.btnSuccess.visibility = GONE
                     binding.progressBar.visibility = VISIBLE
                 }
                 "wifi_not_available" -> {
                     binding.progressBar.visibility = GONE
                     binding.btnLogin.visibility = VISIBLE
+                    binding.btnSuccess.visibility = GONE
                     binding.btnLogin.setIconResource(R.drawable.ic_baseline_wifi_24)
+                    viewModel.netAvailable.value = false
+                    viewModel.judgeEnable()
                 }
                 "wrong_password" -> {
                     binding.btnLogin.visibility = VISIBLE
                     binding.progressBar.visibility = GONE
+                    binding.btnSuccess.visibility = GONE
                     binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
                 }
                 "2_devices" -> {
                     viewModel.searchDeviceLiveData.value = viewModel.authorization.value
                     binding.btnLogin.visibility = VISIBLE
                     binding.progressBar.visibility = GONE
+                    binding.btnSuccess.visibility = GONE
                     binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
                 }
                 "login_success" -> {
@@ -76,30 +90,37 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
                 if (this.statusCode == 200) {
                     Log.d("test123", "登陆成功")
-                    Toast.makeText(requireActivity(), "登陆成功啦", Toast.LENGTH_SHORT).show()
+                    "登陆成功啦".showToast(requireContext())
                     viewModel.buttonState.value = "login_success"
                 } else {
                     this.errorDescription.apply {
                         when (this.first()) {
                             //pc already have 2 sessions
                             'p' -> {
-                                Toast.makeText(requireActivity(), "已登陆2台设备", Toast.LENGTH_SHORT)
-                                    .show()
+                                "已登陆2台设备".showToast(requireContext())
                                 viewModel.buttonState.value = "2_devices"
 
                             }
                             //invalid username or password
                             'i' -> {
-                                Toast.makeText(requireActivity(), "用户名或密码错误", Toast.LENGTH_SHORT)
-                                    .show()
+
+                                "用户名或密码错误".showToast(requireContext())
+
                                 viewModel.buttonState.value = "wrong_password"
                             }
 
                             //NAS no response
                             'N' -> {
-                                Toast.makeText(requireActivity(), "是不是连错网了", Toast.LENGTH_SHORT)
-                                    .show()
+                                "是不是连错网了".showToast(requireContext())
                                 viewModel.buttonState.value = "wifi_not_available"
+
+                            }
+                            //authentication rejected
+                            //删除了设备马上重新登陆会出现这个问题
+                            'a' -> {
+                                "等会再登陆".showToast(requireContext())
+                                sleep(800)
+                                viewModel.loginNwuStudent()
 
                             }
 
@@ -133,16 +154,12 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
         viewModel.netCheck()
 
         binding.mushroom.setOnClickListener {
-//            Log.d("test123", "initEvent: 点击搜索设备")
+            Log.d("test123", "initEvent: 点击搜索设备")
 
             viewModel.authorization.value?.let {
                 viewModel.searchDeviceLiveData.value = it
             } ?: let {
-                Toast.makeText(
-                    requireContext(),
-                    "请先登陆",
-                    Toast.LENGTH_SHORT
-                ).show()
+                "请先登陆".showToast(requireContext())
             }
         }
 
@@ -196,7 +213,7 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
                     )
                     Log.e("test123", "选择放弃的设备：${loginDevices[deviceIndex]}")
                 }
-                if (selectDevices.size!=0) {
+                if (selectDevices.size != 0) {
                     viewModel.loginNwuStudent()
                 }
 

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import com.cxk.nwuhelper.MyApplication.Companion.context
 import com.cxk.nwuhelper.ui.home.model.DeleteBean
 import com.cxk.nwuhelper.ui.home.model.LoginPostBody
+import com.cxk.nwuhelper.utils.showToast
 
 class HomeViewModel : ViewModel() {
 
@@ -19,7 +20,7 @@ class HomeViewModel : ViewModel() {
     //   检测网络
 
     val buttonState = MutableLiveData<String>()
-    lateinit var ipAddress :String
+    lateinit var ipAddress: String
 
     fun netCheck() {
 //        获取 ConnectivityManager 的实例
@@ -61,21 +62,25 @@ class HomeViewModel : ViewModel() {
 //                Log.e("test123", "ip地址:$ipAddress,服务器地址:$serverAddress")
 //                Toast.makeText(context, "ip地址:$ipAddress,服务器地址:$serverAddress", Toast.LENGTH_SHORT).show()
 
-                when(serverAddress.split('.')[0]){
-                    "10" ->{
-//                        Toast.makeText(context, "ip地址:$ipAddress,服务器地址:$serverAddress", Toast.LENGTH_SHORT).show()
+                when (serverAddress.split('.')[0]) {
+                    "10" -> {
                         buttonState.postValue("wifi_available")
+
+//                        Toast.makeText(context, "ip地址:$ipAddress,服务器地址:$serverAddress", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(context, "欢迎登陆", Toast.LENGTH_SHORT).show()
                     }
-                    "172" ->{
-                        Toast.makeText(context, "暂时不支持NWUNET", Toast.LENGTH_SHORT).show()
+                    "172" -> {
+                        "暂时不支持NWUNET".showToast(context)
+                        buttonState.postValue("wifi_not_available")
+
+                    }
+                    "192" -> {
+                        "暂时不支持路由器".showToast(context)
                         buttonState.postValue("wifi_not_available")
                     }
-                    "192" ->{
-                        Toast.makeText(context, "暂时不支持路由器", Toast.LENGTH_SHORT).show()
+                    else -> {
+                        "请连接校园网".showToast(context)
                         buttonState.postValue("wifi_not_available")
-                    }else ->{
-                    Toast.makeText(context, "请连接校园网", Toast.LENGTH_SHORT).show()
-                    buttonState.postValue("wifi_not_available")
                     }
 
                 }
@@ -85,7 +90,6 @@ class HomeViewModel : ViewModel() {
 
 
     }
-
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,15 +117,16 @@ class HomeViewModel : ViewModel() {
 
     var name = MutableLiveData("")
     var password = MutableLiveData("")
+    var netAvailable = MutableLiveData(false)
     val enable = MutableLiveData(false)
 
-    private fun judgeEnable() {
-        enable.value = name.value!!.isNotEmpty() && password.value!!.isNotEmpty()
-        Log.d("password", "judgeEnable: ${enable.value}")
+    fun judgeEnable() {
+        enable.postValue(name.value!!.isNotEmpty() && password.value!!.isNotEmpty() && netAvailable.value!!)
+
+        Log.d("password", "judgeEnable: ${netAvailable.value!!}")
     }
 
     fun onPwdChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        Log.d("password", "judgeEnable: ${enable.value}")
         password.value = s.toString()
         judgeEnable()
     }
@@ -165,9 +170,6 @@ class HomeViewModel : ViewModel() {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //    删除设备
 
-
-    val deviceId =
-        "radius:acct:35cb8667-2649-4af3-86b7-854194219302:xx:31a6f231b5ccf8506c9454c34fb1b5af"
 
     private val deleteDeviceLiveData = MutableLiveData<DeleteBean>()
 
