@@ -4,7 +4,6 @@ import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
@@ -13,7 +12,7 @@ import com.cxk.nwuhelper.ui.home.model.DeleteBean
 import com.cxk.nwuhelper.ui.home.model.LoginPostBody
 import com.cxk.nwuhelper.utils.showToast
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel() : ViewModel() {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,24 +114,27 @@ class HomeViewModel : ViewModel() {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //    登陆设备
 
-    var name = MutableLiveData("")
-    var password = MutableLiveData("")
+    lateinit var nameSave:String
+    lateinit var passwordSave:String
+
+    var nameLiveData = MutableLiveData("")
+    var passwordLiveData = MutableLiveData("")
     var netAvailable = MutableLiveData(false)
     val enable = MutableLiveData(false)
 
     fun judgeEnable() {
-        enable.postValue(name.value!!.isNotEmpty() && password.value!!.isNotEmpty() && netAvailable.value!!)
+        enable.postValue(nameLiveData.value!!.isNotEmpty() && passwordLiveData.value!!.isNotEmpty() && netAvailable.value!!)
 
         Log.d("password", "judgeEnable: ${netAvailable.value!!}")
     }
 
     fun onPwdChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        password.value = s.toString()
+        passwordLiveData.value = s.toString()
         judgeEnable()
     }
 
     fun onNameChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        name.value = s.toString()
+        nameLiveData.value = s.toString()
         judgeEnable()
     }
 
@@ -148,8 +150,8 @@ class HomeViewModel : ViewModel() {
 
         val loginPostBody = LoginPostBody(
             redirectUrl = url,
-            webAuthUser = name.value!!,
-            webAuthPassword = password.value!!
+            webAuthUser = nameLiveData.value!!,
+            webAuthPassword = passwordLiveData.value!!
         )
         loginDevices(loginPostBody)
         buttonState.value = "start_to_login"

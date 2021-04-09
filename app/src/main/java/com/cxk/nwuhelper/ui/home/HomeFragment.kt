@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentHomeBinding
 import com.cxk.nwuhelper.ui.base.BaseVMFragment
@@ -155,6 +154,10 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 
         binding.mushroom.setOnClickListener {
             Log.d("test123", "initEvent: 点击搜索设备")
+
+            //保存用户名密码
+            viewModel.nameSave = viewModel.nameLiveData.value!!
+            viewModel.passwordSave = viewModel.passwordLiveData.value!!
 
             viewModel.authorization.value?.let {
                 viewModel.searchDeviceLiveData.value = it

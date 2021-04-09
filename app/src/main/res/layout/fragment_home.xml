@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:onTextChanged="@{model::onNameChanged}"
-                android:text="@{model.name}"/>
+                android:text="@{model.nameLiveData}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:onTextChanged="@{model::onPwdChanged}"
-                android:text="@{model.password}"/>
+                android:text="@{model.passwordLiveData}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 
