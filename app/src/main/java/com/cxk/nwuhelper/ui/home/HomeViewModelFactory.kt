@@ -2,9 +2,10 @@ package com.cxk.nwuhelper.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.cxk.nwuhelper.ui.home.model.HomeSpBean
 
-class HomeViewModelFactory :ViewModelProvider.Factory{
+class HomeViewModelFactory(private val homeSpBean: HomeSpBean) :ViewModelProvider.Factory{
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return HomeViewModel() as T
+        return HomeViewModel(homeSpBean) as T
     }
 }

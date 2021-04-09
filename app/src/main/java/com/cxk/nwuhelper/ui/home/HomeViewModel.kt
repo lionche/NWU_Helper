@@ -4,15 +4,18 @@ import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
 import android.util.Log
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.cxk.nwuhelper.MyApplication.Companion.context
 import com.cxk.nwuhelper.ui.home.model.DeleteBean
+import com.cxk.nwuhelper.ui.home.model.HomeSpBean
 import com.cxk.nwuhelper.ui.home.model.LoginPostBody
 import com.cxk.nwuhelper.utils.showToast
 
-class HomeViewModel() : ViewModel() {
+class HomeViewModel(val homeSpBean: HomeSpBean) : ViewModel() , BaseObservable() {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,8 +117,9 @@ class HomeViewModel() : ViewModel() {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //    登陆设备
 
-    lateinit var nameSave:String
-    lateinit var passwordSave:String
+    val nameSave = homeSpBean.name
+    val passwordSave = homeSpBean.password
+
 
     var nameLiveData = MutableLiveData("")
     var passwordLiveData = MutableLiveData("")
@@ -138,6 +142,26 @@ class HomeViewModel() : ViewModel() {
         judgeEnable()
     }
 
+
+    /**
+     * 记住密码
+     */
+    @Bindable
+
+    fun getRememberPassword(): Boolean {
+        return homeSpBean.rmPassword
+    }
+
+    fun setRememberPassword(value: Boolean) {
+        if (homeSpBean.rmPassword != value) {
+            homeSpBean.rmPassword = value
+
+        }
+    }
+    fun rememberPassword(){
+
+
+    }
 
     /**
      * 登陆校园网

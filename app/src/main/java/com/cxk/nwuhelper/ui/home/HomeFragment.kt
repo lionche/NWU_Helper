@@ -4,9 +4,11 @@ import android.app.AlertDialog
 import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.lifecycle.ViewModelProvider
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentHomeBinding
-import com.cxk.nwuhelper.ui.base.BaseVMFragment
+import com.cxk.nwuhelper.ui.base.BaseVMPFragment
+import com.cxk.nwuhelper.ui.home.model.HomeSpBean
 import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
 import com.cxk.nwuhelper.utils.showToast
 import com.github.ybq.android.spinkit.sprite.Sprite
@@ -14,7 +16,7 @@ import com.github.ybq.android.spinkit.style.DoubleBounce
 import java.lang.Thread.sleep
 
 
-class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
+class HomeFragment : BaseVMPFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun observerData() {
         binding.model = viewModel
@@ -152,12 +154,13 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
          */
         viewModel.netCheck()
 
+        viewModel.nameLiveData.value = viewModel.nameSave
+        viewModel.passwordLiveData.value = viewModel.passwordSave
+
         binding.mushroom.setOnClickListener {
             Log.d("test123", "initEvent: 点击搜索设备")
 
             //保存用户名密码
-            viewModel.nameSave = viewModel.nameLiveData.value!!
-            viewModel.passwordSave = viewModel.passwordLiveData.value!!
 
             viewModel.authorization.value?.let {
                 viewModel.searchDeviceLiveData.value = it
@@ -165,6 +168,8 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
                 "请先登陆".showToast(requireContext())
             }
         }
+
+
 
 //        binding.mushroom.setOnLongClickListener {
 //            Log.d("test123", "initEvent: 点击删除设备")
@@ -187,8 +192,7 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
 //        }
     }
 
-    override fun getSubLayoutId() = R.layout.fragment_home
-    override fun getSubVMClass() = HomeViewModel::class.java
+
 
     private fun showDialog(list: List<SearchSessionsResponse.Sessions>) {
         val loginDevices = list.map { it.deviceType }.toTypedArray()
@@ -225,6 +229,14 @@ class HomeFragment : BaseVMFragment<FragmentHomeBinding, HomeViewModel>() {
             show()
         }
 
+    }
+
+
+    override fun getSubLayoutId() = R.layout.fragment_home
+    override fun getSubVMClass() = HomeViewModel::class.java
+    override fun initViewModel() {
+        val homeSpBean = HomeSpBean("202032908","password",true,true)
+        viewModel = ViewModelProvider(this,HomeViewModelFactory(homeSpBean)).get(getSubVMClass())
     }
 
 
