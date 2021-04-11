@@ -4,18 +4,19 @@ import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
 import android.util.Log
-import androidx.databinding.BaseObservable
-import androidx.databinding.Bindable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.cxk.nwuhelper.BaseConstant
 import com.cxk.nwuhelper.MyApplication.Companion.context
 import com.cxk.nwuhelper.ui.home.model.DeleteBean
 import com.cxk.nwuhelper.ui.home.model.HomeSpBean
 import com.cxk.nwuhelper.ui.home.model.LoginPostBody
+import com.cxk.nwuhelper.utils.AppPrefsUtils
 import com.cxk.nwuhelper.utils.showToast
 
-class HomeViewModel(val homeSpBean: HomeSpBean) : ViewModel() , BaseObservable() {
+
+class HomeViewModel(val homeSpBean: HomeSpBean) : ViewModel() {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,7 +82,7 @@ class HomeViewModel(val homeSpBean: HomeSpBean) : ViewModel() , BaseObservable()
                         buttonState.postValue("wifi_not_available")
                     }
                     else -> {
-                        "请连接校园网".showToast(context)
+//                        "请连接校园网".showToast(context)
                         buttonState.postValue("wifi_not_available")
                     }
 
@@ -114,59 +115,74 @@ class HomeViewModel(val homeSpBean: HomeSpBean) : ViewModel() , BaseObservable()
     val authorization = MutableLiveData<String>()
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //    登陆设备
 
-    val nameSave = homeSpBean.name
-    val passwordSave = homeSpBean.password
 
+    var name: String
+    var password: String
+    val autoLoginLiveData = MutableLiveData<Boolean>()
+    val rmPasswordLiveData = MutableLiveData<Boolean>()
 
-    var nameLiveData = MutableLiveData("")
-    var passwordLiveData = MutableLiveData("")
-    var netAvailable = MutableLiveData(false)
+    init {
+        name = homeSpBean.name
+        password = homeSpBean.password
+        autoLoginLiveData.value = homeSpBean.autoLogin
+        rmPasswordLiveData.value = homeSpBean.rmPassword
+    }
+
+    var netAvailable = false
+
     val enable = MutableLiveData(false)
 
     fun judgeEnable() {
-        enable.postValue(nameLiveData.value!!.isNotEmpty() && passwordLiveData.value!!.isNotEmpty() && netAvailable.value!!)
+        enable.postValue(name.isNotEmpty() && password.isNotEmpty() && netAvailable)
 
-        Log.d("password", "judgeEnable: ${netAvailable.value!!}")
+        Log.d("password", "judgeEnable: ${enable.value}")
     }
 
     fun onPwdChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        passwordLiveData.value = s.toString()
+        password = s.toString()
         judgeEnable()
     }
 
     fun onNameChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        nameLiveData.value = s.toString()
+        name = s.toString()
         judgeEnable()
     }
 
-
-    /**
-     * 记住密码
-     */
-    @Bindable
-
-    fun getRememberPassword(): Boolean {
-        return homeSpBean.rmPassword
-    }
-
-    fun setRememberPassword(value: Boolean) {
-        if (homeSpBean.rmPassword != value) {
-            homeSpBean.rmPassword = value
-
-        }
-    }
-    fun rememberPassword(){
-
-
-    }
 
     /**
      * 登陆校园网
      */
     fun loginNwuStudent() {
+
+
+        Log.d("gouxuan", "保存勾选记住密码${rmPasswordLiveData.value}")
+        AppPrefsUtils.putBoolean(
+            BaseConstant.IS_REMEMBER_PASSWORD_STUDENT,
+            rmPasswordLiveData.value!!
+        )
+        Log.d("gouxuan", "保存勾选自动登录${autoLoginLiveData.value}")
+
+        AppPrefsUtils.putBoolean(
+            BaseConstant.IS_AUTO_LOGIN_STUDENT,
+            autoLoginLiveData.value!!
+        )
+
+        /**
+         * 判断是否记住密码
+         */
+        if (rmPasswordLiveData.value!!) {
+            AppPrefsUtils.putString(BaseConstant.NAME_STUDENT, name)
+            AppPrefsUtils.putString(BaseConstant.PASSWORD_STUDENT, password)
+            Log.d("gouxuan", "loginNwuStudent: 保存用户为$name,密码为$password")
+        }else{
+            Log.d("gouxuan", " 保存用户为$name,密码为$password")
+            AppPrefsUtils.putString(BaseConstant.NAME_STUDENT, "")
+            AppPrefsUtils.putString(BaseConstant.PASSWORD_STUDENT, "")
+        }
+
+
         //根据ip修改连接
         var url =
             "http://10.16.0.12:8081/?usermac=XX:XX:XX:XX:XX:XX&userip=MYIP&origurl=http://edge.microsoft.com/captiveportal/generate_204&nasip=10.100.0.1"
@@ -174,8 +190,8 @@ class HomeViewModel(val homeSpBean: HomeSpBean) : ViewModel() , BaseObservable()
 
         val loginPostBody = LoginPostBody(
             redirectUrl = url,
-            webAuthUser = nameLiveData.value!!,
-            webAuthPassword = passwordLiveData.value!!
+            webAuthUser = name,
+            webAuthPassword = password
         )
         loginDevices(loginPostBody)
         buttonState.value = "start_to_login"

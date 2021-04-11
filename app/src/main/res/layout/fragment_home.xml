@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="model"
-            type="com.cxk.nwuhelper.ui.home.HomeViewModel"
-            />
+            type="com.cxk.nwuhelper.ui.home.HomeViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,22 +28,22 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:hint="@string/name_hint"
             app:boxStrokeColor="@color/black"
             app:boxStrokeWidthFocused="2dp"
+            app:endIconMode="clear_text"
             app:endIconTint="@color/black"
             app:hintTextColor="@color/black"
-            app:startIconDrawable="@drawable/ic_baseline_account_circle_24"
-            app:startIconTint="@color/black"
-            app:endIconMode="clear_text"
-            android:hint="@string/name_hint"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.40">
+            app:layout_constraintVertical_bias="0.40"
+            app:startIconDrawable="@drawable/ic_baseline_account_circle_24"
+            app:startIconTint="@color/black">
 
 
             <com.google.android.material.textfield.TextInputEditText
@@ -51,32 +52,32 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:onTextChanged="@{model::onNameChanged}"
-                android:text="@{model.nameLiveData}"/>
+                android:text="@={model.name}" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:hint="@string/password_hint"
             app:boxCornerRadiusBottomEnd="50dp"
             app:boxCornerRadiusBottomStart="50dp"
             app:boxCornerRadiusTopEnd="50dp"
             app:boxCornerRadiusTopStart="50dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:hint="@string/password_hint"
             app:boxStrokeColor="@color/black"
             app:boxStrokeWidthFocused="2dp"
             app:endIconMode="password_toggle"
             app:endIconTint="@color/black"
             app:hintTextColor="@color/black"
-            app:startIconDrawable="@drawable/ic_baseline_lock_24"
-            app:startIconTint="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.50">
+            app:layout_constraintVertical_bias="0.50"
+            app:startIconDrawable="@drawable/ic_baseline_lock_24"
+            app:startIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_password"
@@ -84,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:onTextChanged="@{model::onPwdChanged}"
-                android:text="@{model.passwordLiveData}"/>
+                android:text="@={model.password}" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -92,7 +93,7 @@
             android:id="@+id/rm_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="@={model.getRememberPassword}"
+            android:checked="@={model.rmPasswordLiveData}"
             android:text="@string/remember_password"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -105,6 +106,7 @@
             android:id="@+id/au_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="@={model.autoLoginLiveData}"
             android:text="@string/auto_login"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -117,10 +119,10 @@
         <com.github.ybq.android.spinkit.SpinKitView
             android:id="@+id/progress_bar"
             style="@style/SpinKitView.Large.Circle"
-            android:visibility="visible"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_gravity="center"
+            android:visibility="visible"
             app:SpinKit_Color="?attr/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -145,27 +147,27 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login"
-            android:visibility="gone"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_gravity="center"
+            android:enabled="@{model.enable}"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
             android:insetBottom="0dp"
+            android:onClick="@{()-> model.loginNwuStudent()}"
             android:padding="0dp"
+            android:visibility="gone"
             app:cornerRadius="100dp"
             app:icon="@drawable/ic_baseline_arrow_forward_24"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconSize="35dp"
-            android:enabled="@{model.enable}"
-            android:onClick="@{()-> model.loginNwuStudent()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.80"/>
+            app:layout_constraintVertical_bias="0.80" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

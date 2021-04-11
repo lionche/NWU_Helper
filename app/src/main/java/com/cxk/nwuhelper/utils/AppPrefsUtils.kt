@@ -37,7 +37,7 @@ object AppPrefsUtils {
         默认 false
      */
     fun getBoolean(key: String): Boolean {
-        return sp.getBoolean(key, true)
+        return sp.getBoolean(key, false)
     }
 
     /*
