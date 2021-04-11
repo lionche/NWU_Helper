@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">NWU Helper</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">校园网</string>
+    <string name="title_dashboard">成绩</string>
+    <string name="title_notifications">介绍</string>
     <string name="name_hint">请输入用户名</string>
     <string name="password_hint">请输入密码</string>
     <string name="remember_me">记住密码</string>

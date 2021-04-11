@@ -7,12 +7,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.cxk.nwuhelper.BaseConstant
 import com.cxk.nwuhelper.MyApplication.Companion.context
 import com.cxk.nwuhelper.ui.home.model.DeleteBean
 import com.cxk.nwuhelper.ui.home.model.HomeSpBean
 import com.cxk.nwuhelper.ui.home.model.LoginPostBody
-import com.cxk.nwuhelper.utils.AppPrefsUtils
 import com.cxk.nwuhelper.utils.showToast
 
 
@@ -157,30 +155,8 @@ class HomeViewModel(val homeSpBean: HomeSpBean) : ViewModel() {
     fun loginNwuStudent() {
 
 
-        Log.d("gouxuan", "保存勾选记住密码${rmPasswordLiveData.value}")
-        AppPrefsUtils.putBoolean(
-            BaseConstant.IS_REMEMBER_PASSWORD_STUDENT,
-            rmPasswordLiveData.value!!
-        )
-        Log.d("gouxuan", "保存勾选自动登录${autoLoginLiveData.value}")
 
-        AppPrefsUtils.putBoolean(
-            BaseConstant.IS_AUTO_LOGIN_STUDENT,
-            autoLoginLiveData.value!!
-        )
 
-        /**
-         * 判断是否记住密码
-         */
-        if (rmPasswordLiveData.value!!) {
-            AppPrefsUtils.putString(BaseConstant.NAME_STUDENT, name)
-            AppPrefsUtils.putString(BaseConstant.PASSWORD_STUDENT, password)
-            Log.d("gouxuan", "loginNwuStudent: 保存用户为$name,密码为$password")
-        }else{
-            Log.d("gouxuan", " 保存用户为$name,密码为$password")
-            AppPrefsUtils.putString(BaseConstant.NAME_STUDENT, "")
-            AppPrefsUtils.putString(BaseConstant.PASSWORD_STUDENT, "")
-        }
 
 
         //根据ip修改连接

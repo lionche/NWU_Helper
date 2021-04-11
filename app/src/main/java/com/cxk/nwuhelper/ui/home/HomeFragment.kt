@@ -58,6 +58,10 @@ class HomeFragment : BaseVMPFragment<FragmentHomeBinding, HomeViewModel>() {
                         Log.d("password", "fragmentpost后: ${viewModel.netAvailable}")
                         viewModel.judgeEnable()
 
+                        if(viewModel.autoLoginLiveData.value == true){
+                            viewModel.loginNwuStudent()
+                        }
+
 
                     }
                     "start_to_login" -> {
@@ -87,6 +91,28 @@ class HomeFragment : BaseVMPFragment<FragmentHomeBinding, HomeViewModel>() {
                         binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
                     }
                     "login_success" -> {
+
+                        AppPrefsUtils.putBoolean(
+                            BaseConstant.IS_REMEMBER_PASSWORD_STUDENT,
+                            viewModel.rmPasswordLiveData.value!!
+                        )
+                        AppPrefsUtils.putBoolean(
+                            BaseConstant.IS_AUTO_LOGIN_STUDENT,
+                            viewModel.autoLoginLiveData.value!!
+                        )
+
+                        /**
+                         * 判断是否记住密码
+                         */
+                        if (viewModel.rmPasswordLiveData.value!!) {
+                            AppPrefsUtils.putString(BaseConstant.NAME_STUDENT, viewModel.name)
+                            AppPrefsUtils.putString(BaseConstant.PASSWORD_STUDENT, viewModel.password)
+                            Log.d("gouxuan", "loginNwuStudent: 保存用户为$viewModel.name,密码为$viewModel.password")
+                        }else{
+                            AppPrefsUtils.putString(BaseConstant.NAME_STUDENT, "")
+                            AppPrefsUtils.putString(BaseConstant.PASSWORD_STUDENT, "")
+                        }
+
                         binding.progressBar.visibility = GONE
                         binding.btnSuccess.visibility = VISIBLE
                         binding.btnSuccess.apply {
@@ -125,7 +151,7 @@ class HomeFragment : BaseVMPFragment<FragmentHomeBinding, HomeViewModel>() {
                             when (this.first()) {
                                 //pc already have 2 sessions
                                 'p' -> {
-                                    "已登陆2台设备".showToast(requireContext())
+//                                    "已登陆2台设备".showToast(requireContext())
                                     viewModel.buttonState.value = "2_devices"
 
                                 }
@@ -183,7 +209,7 @@ class HomeFragment : BaseVMPFragment<FragmentHomeBinding, HomeViewModel>() {
         viewModel.netCheck()
 
         /**
-         * 根据设置数据
+         * 检测是否为自动登录
          */
 
 
