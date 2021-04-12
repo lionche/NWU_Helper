@@ -1,6 +1,7 @@
-package com.cxk.nwuhelper.ui.home
+package com.cxk.nwuhelper.ui.nwunet
 
-import com.cxk.nwuhelper.ui.home.model.LoginPostBody
+
+import com.cxk.nwuhelper.ui.wenet.model.LoginPostBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -8,9 +9,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-object NwuStudentNetwork {
+object Nwunetwork {
 
-    private val nwuStudentService = ServiceCreator.create<NwuStudentService>()
+    private val nwuStudentService = ServiceCreator.create<NwunetService>()
 
 
     suspend fun searchDevices(authorization:String) = nwuStudentService.searchDevices(authorization).await()

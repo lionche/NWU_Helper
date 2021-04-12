@@ -1,4 +1,4 @@
-package com.cxk.nwuhelper.ui.home.model
+package com.cxk.nwuhelper.ui.nwunet.model
 
 data class DeleteBean(
     val authorization : String,

@@ -1,4 +1,4 @@
-package com.cxk.nwuhelper.ui.home.model
+package com.cxk.nwuhelper.ui.wenet.model
 
 data class LoginResponse(
     val createdAt: Int,

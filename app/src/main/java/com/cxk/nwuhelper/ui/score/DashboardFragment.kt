@@ -1,4 +1,4 @@
-package com.cxk.nwuhelper.ui.dashboard
+package com.cxk.nwuhelper.ui.score
 
 import android.content.Intent
 import android.os.Bundle

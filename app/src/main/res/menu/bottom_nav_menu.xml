@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
+        android:id="@+id/navigation_wenet"
+        android:icon="@drawable/ic_owl_24dp"
+        android:title="@string/title_wenet" />
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:id="@+id/navigation_nwunet"
+        android:icon="@drawable/ic_baseline_wifi_24"
+        android:title="@string/title_nwunet" />
 
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:id="@+id/navigation_score"
+        android:icon="@drawable/ic_score_24dp"
+        android:title="@string/title_score" />
 
 </menu>

@@ -69,7 +69,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
 
     //blankj安卓工具
-//    implementation 'com.blankj:utilcodex:1.30.6'
+    implementation 'com.blankj:utilcodex:1.30.6'
 
     //登陆按键动画
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'

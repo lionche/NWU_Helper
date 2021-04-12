@@ -6,16 +6,17 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <!--    获取使用网络权限-->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--    获取wifi网络权限-->
+<!--    &lt;!&ndash;    获取wifi网络权限&ndash;&gt;-->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <!--位置信息-->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!--如果是安卓10.0，需要后台获取连接的wifi名称则添加进程获取位置信息权限 -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <!--android 10.0使用wifi api新添加的权限-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<!--    &lt;!&ndash;位置信息&ndash;&gt;-->
+<!--    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
+<!--    &lt;!&ndash;如果是安卓10.0，需要后台获取连接的wifi名称则添加进程获取位置信息权限 &ndash;&gt;-->
+<!--    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
+<!--    &lt;!&ndash;android 10.0使用wifi api新添加的权限&ndash;&gt;-->
+<!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+
 
 
     <application
@@ -44,6 +45,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
     </application>
 
 </manifest>

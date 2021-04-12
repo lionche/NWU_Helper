@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.cxk.nwuhelper.ui.home.HomeViewModel" />
+            type="com.cxk.nwuhelper.ui.nwunet.NwunetViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

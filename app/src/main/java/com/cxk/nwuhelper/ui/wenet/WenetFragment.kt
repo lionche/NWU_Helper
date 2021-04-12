@@ -1,4 +1,4 @@
-package com.cxk.nwuhelper.ui.home
+package com.cxk.nwuhelper.ui.wenet
 
 import android.app.AlertDialog
 import android.util.Log
@@ -7,10 +7,10 @@ import android.view.View.VISIBLE
 import androidx.lifecycle.ViewModelProvider
 import com.cxk.nwuhelper.BaseConstant
 import com.cxk.nwuhelper.R
-import com.cxk.nwuhelper.databinding.FragmentHomeBinding
+import com.cxk.nwuhelper.databinding.FragmentWenetBinding
 import com.cxk.nwuhelper.ui.base.BaseVMPFragment
-import com.cxk.nwuhelper.ui.home.model.HomeSpBean
-import com.cxk.nwuhelper.ui.home.model.SearchSessionsResponse
+import com.cxk.nwuhelper.ui.wenet.model.SearchSessionsResponse
+import com.cxk.nwuhelper.ui.wenet.model.WenetSpBean
 import com.cxk.nwuhelper.utils.AppPrefsUtils
 import com.cxk.nwuhelper.utils.showToast
 import com.github.ybq.android.spinkit.sprite.Sprite
@@ -18,7 +18,13 @@ import com.github.ybq.android.spinkit.style.DoubleBounce
 import java.lang.Thread.sleep
 
 
-class HomeFragment : BaseVMPFragment<FragmentHomeBinding, HomeViewModel>() {
+class WenetFragment : BaseVMPFragment<FragmentWenetBinding, WenetViewModel>() {
+
+    override fun onResume() {
+//        Log.d("huilai", "onResume: ")
+        viewModel.netCheck()
+        super.onResume()
+    }
 
     override fun observerData() {
         binding.model = viewModel
@@ -58,7 +64,7 @@ class HomeFragment : BaseVMPFragment<FragmentHomeBinding, HomeViewModel>() {
                         Log.d("password", "fragmentpost后: ${viewModel.netAvailable}")
                         viewModel.judgeEnable()
 
-                        if(viewModel.autoLoginLiveData.value == true){
+                        if (viewModel.autoLoginLiveData.value == true) {
                             viewModel.loginNwuStudent()
                         }
 
@@ -106,9 +112,15 @@ class HomeFragment : BaseVMPFragment<FragmentHomeBinding, HomeViewModel>() {
                          */
                         if (viewModel.rmPasswordLiveData.value!!) {
                             AppPrefsUtils.putString(BaseConstant.NAME_STUDENT, viewModel.name)
-                            AppPrefsUtils.putString(BaseConstant.PASSWORD_STUDENT, viewModel.password)
-                            Log.d("gouxuan", "loginNwuStudent: 保存用户为$viewModel.name,密码为$viewModel.password")
-                        }else{
+                            AppPrefsUtils.putString(
+                                BaseConstant.PASSWORD_STUDENT,
+                                viewModel.password
+                            )
+                            Log.d(
+                                "gouxuan",
+                                "loginNwuStudent: 保存用户为${viewModel.name},密码为${viewModel.password}"
+                            )
+                        } else {
                             AppPrefsUtils.putString(BaseConstant.NAME_STUDENT, "")
                             AppPrefsUtils.putString(BaseConstant.PASSWORD_STUDENT, "")
                         }
@@ -172,7 +184,7 @@ class HomeFragment : BaseVMPFragment<FragmentHomeBinding, HomeViewModel>() {
                                 //authentication rejected
                                 //删除了设备马上重新登陆会出现这个问题
                                 'a' -> {
-                                    "等会再登陆".showToast(requireContext())
+//                                    "等会再登陆".showToast(requireContext())
                                     sleep(800)
                                     viewModel.loginNwuStudent()
 
@@ -289,8 +301,8 @@ class HomeFragment : BaseVMPFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
 
-    override fun getSubLayoutId() = R.layout.fragment_home
-    override fun getSubVMClass() = HomeViewModel::class.java
+    override fun getSubLayoutId() = R.layout.fragment_wenet
+    override fun getSubVMClass() = WenetViewModel::class.java
     override fun initViewModel() {
         val IS_AUTO_LOGIN = AppPrefsUtils.getBoolean(BaseConstant.IS_AUTO_LOGIN_STUDENT)
         val IS_REMEMBER_PASSWORD =
@@ -299,8 +311,8 @@ class HomeFragment : BaseVMPFragment<FragmentHomeBinding, HomeViewModel>() {
         val PASSWORD_STUDENT = AppPrefsUtils.getString(BaseConstant.PASSWORD_STUDENT)
 
         val homeSpBean =
-            HomeSpBean(NAME_STUDENT!!, PASSWORD_STUDENT!!, IS_REMEMBER_PASSWORD, IS_AUTO_LOGIN)
-        viewModel = ViewModelProvider(this, HomeViewModelFactory(homeSpBean)).get(getSubVMClass())
+            WenetSpBean(NAME_STUDENT!!, PASSWORD_STUDENT!!, IS_REMEMBER_PASSWORD, IS_AUTO_LOGIN)
+        viewModel = ViewModelProvider(this, WenetViewModelFactory(homeSpBean)).get(getSubVMClass())
     }
 
 
