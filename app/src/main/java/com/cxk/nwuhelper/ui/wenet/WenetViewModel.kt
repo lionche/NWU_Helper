@@ -12,6 +12,7 @@ import com.cxk.nwuhelper.MyApplication.Companion.context
 import com.cxk.nwuhelper.ui.wenet.model.DeleteBean
 import com.cxk.nwuhelper.ui.wenet.model.LoginPostBody
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
+import com.cxk.nwuhelper.utils.showToast
 
 
 class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
@@ -63,7 +64,7 @@ class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
                 IpAddressByWifi = NetworkUtils.getIpAddressByWifi()
                 val ServerAddressByWifi = NetworkUtils.getServerAddressByWifi()
                 val isWifiAvailable = NetworkUtils.isWifiAvailable()
-//                ("ip:${IpAddressByWifi},server:$ServerAddressByWifi").showToast(context)
+                ("ip:${IpAddressByWifi},server:$ServerAddressByWifi").showToast(context)
 
                 Log.e("test123", "getIpAddressByWifi,$IpAddressByWifi")
                 Log.e("test123", "ServerAddressByWifi,$ServerAddressByWifi")
@@ -76,10 +77,9 @@ class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
                 } else if ("192.168" in ServerAddressByWifi) {
 //                    "暂时不支持路由器".showToast(context)
                     buttonState.postValue("wifi_not_available")
-                } else if ("10.17.254.254" in ServerAddressByWifi) {
+                } else if ("254.254" in ServerAddressByWifi) {
 //                    "可以登陆".showToast(context)
                     buttonState.postValue("wifi_available")
-
                 } else if ("172.18.6.6" in ServerAddressByWifi) {
 //                    "暂时不支持NWUNET".showToast(context)
                     buttonState.postValue("wifi_not_available")

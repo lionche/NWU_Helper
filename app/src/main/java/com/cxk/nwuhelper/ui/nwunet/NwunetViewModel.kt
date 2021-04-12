@@ -64,9 +64,9 @@ class NwunetViewModel(netSpBean: NetSpBean) : ViewModel() {
 //                Log.e("test123", "$linkProperties")\
                 val ServerAddressByWifi = NetworkUtils.getServerAddressByWifi()
                 val isWifiAvailable = NetworkUtils.isWifiAvailable()
-//                ("ip:${IpAddressByWifi},server:$ServerAddressByWifi").showToast(context)
                 Log.d("test123", "ServerAddressByWifi,$ServerAddressByWifi")
                 Log.d("test123", "isWifiAvailable,$isWifiAvailable")
+
 
 
                 if (!isWifiAvailable) {
@@ -75,10 +75,9 @@ class NwunetViewModel(netSpBean: NetSpBean) : ViewModel() {
                 } else if ("192.168" in ServerAddressByWifi) {
 //                    "暂时不支持路由器".showToast(context)
                     buttonState.postValue("wifi_not_available")
-                } else if ("10.17.254.254" in ServerAddressByWifi) {
+                } else if (".254.254" in ServerAddressByWifi) {
 //                    "可以登陆".showToast(context)
                     buttonState.postValue("wifi_not_available")
-
                 } else if ("172.18.6.6" in ServerAddressByWifi) {
 //                    "暂时不支持NWUNET".showToast(context)
                     buttonState.postValue("wifi_available")
