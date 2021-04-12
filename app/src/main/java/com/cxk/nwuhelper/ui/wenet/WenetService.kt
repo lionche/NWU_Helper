@@ -13,7 +13,6 @@ interface WenetService {
     @GET("session/list")
     fun searchDevices(@Header("authorization") authorization: String): Call<SearchSessionsResponse>
 
-
     //登录设备
     @Headers("Content-Type: application/json")
     @POST("online?noCache=1616815922222")

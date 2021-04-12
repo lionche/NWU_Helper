@@ -2,10 +2,10 @@ package com.cxk.nwuhelper.ui.nwunet
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.cxk.nwuhelper.ui.wenet.model.WenetSpBean
+import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 
-class NwunetViewModelFactory(private val wenetSpBean: WenetSpBean) :ViewModelProvider.Factory{
+class NwunetViewModelFactory(private val netSpBean: NetSpBean) :ViewModelProvider.Factory{
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return NwunetViewModel(wenetSpBean) as T
+        return NwunetViewModel(netSpBean) as T
     }
 }

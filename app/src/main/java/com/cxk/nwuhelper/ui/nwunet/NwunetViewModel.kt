@@ -10,19 +10,17 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.blankj.utilcode.util.NetworkUtils
 import com.cxk.nwuhelper.MyApplication.Companion.context
-import com.cxk.nwuhelper.ui.wenet.model.DeleteBean
 import com.cxk.nwuhelper.ui.wenet.model.LoginPostBody
-import com.cxk.nwuhelper.ui.wenet.model.WenetSpBean
+import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 
 
-class NwunetViewModel(val wenetSpBean: WenetSpBean) : ViewModel() {
+class NwunetViewModel(netSpBean: NetSpBean) : ViewModel() {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //   检测网络
 
     val buttonState = MutableLiveData<String>()
-    lateinit var IpAddressByWifi: String
 
     fun netCheck() {
 //        获取 ConnectivityManager 的实例
@@ -48,6 +46,7 @@ class NwunetViewModel(val wenetSpBean: WenetSpBean) : ViewModel() {
 
             override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
 
+
 //                val linkAddresses = linkProperties.linkAddresses
 //                val linkAddresses1 = linkAddresses.toString().indexOf("64, ")
 //                val linkAddresses2 = linkAddresses.toString().lastIndexOf('/')
@@ -63,13 +62,11 @@ class NwunetViewModel(val wenetSpBean: WenetSpBean) : ViewModel() {
 
 //                Log.e("test123", "ip地址:$ipAddress,服务器地址:$serverAddress")
 //                Log.e("test123", "$linkProperties")\
-                IpAddressByWifi = NetworkUtils.getIpAddressByWifi()
                 val ServerAddressByWifi = NetworkUtils.getServerAddressByWifi()
                 val isWifiAvailable = NetworkUtils.isWifiAvailable()
 //                ("ip:${IpAddressByWifi},server:$ServerAddressByWifi").showToast(context)
-                Log.e("test123", "getIpAddressByWifi,$IpAddressByWifi")
-                Log.e("test123", "ServerAddressByWifi,$ServerAddressByWifi")
-                Log.e("test123", "isWifiAvailable,$isWifiAvailable")
+                Log.d("test123", "ServerAddressByWifi,$ServerAddressByWifi")
+                Log.d("test123", "isWifiAvailable,$isWifiAvailable")
 
 
                 if (!isWifiAvailable) {
@@ -80,39 +77,15 @@ class NwunetViewModel(val wenetSpBean: WenetSpBean) : ViewModel() {
                     buttonState.postValue("wifi_not_available")
                 } else if ("10.17.254.254" in ServerAddressByWifi) {
 //                    "可以登陆".showToast(context)
-                    buttonState.postValue("wifi_available")
+                    buttonState.postValue("wifi_not_available")
 
                 } else if ("172.18.6.6" in ServerAddressByWifi) {
 //                    "暂时不支持NWUNET".showToast(context)
-                    buttonState.postValue("wifi_not_available")
+                    buttonState.postValue("wifi_available")
                 } else {
 //                    "流量".showToast(context)
                     buttonState.postValue("wifi_not_available")
                 }
-
-
-//                when (serverAddress.split('.')[0]) {
-//                    "10" -> {
-//                        buttonState.postValue("wifi_available")
-////                        Toast.makeText(context, "ip地址:$ipAddress,服务器地址:$serverAddress", Toast.LENGTH_SHORT).show()
-////                        Toast.makeText(context, "欢迎登陆", Toast.LENGTH_SHORT).show()
-//                    }
-//                    "172" -> {
-//                        "暂时不支持NWUNET".showToast(context)
-//                        buttonState.postValue("wifi_not_available")
-//
-//                    }
-//                    "192" -> {
-//                        "暂时不支持路由器".showToast(context)
-//                        buttonState.postValue("wifi_not_available")
-//                    }
-//                    else -> {
-////                        "请连接校园网".showToast(context)
-//                        buttonState.postValue("wifi_not_available")
-//                    }
-//
-//                }
-
             }
         })
 
@@ -120,21 +93,6 @@ class NwunetViewModel(val wenetSpBean: WenetSpBean) : ViewModel() {
     }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    搜索设备
-
-
-    var searchDeviceLiveData = MutableLiveData<String>()
-
-//    var deviceList = ArrayList<SearchSessionsResponse.Sessions>()
-    /**
-     * 登陆设备检查
-     */
-    val deviceLiveData = Transformations.switchMap(searchDeviceLiveData) { authorization ->
-        Repository.searchDevices(authorization)
-    }
 
     //登陆时赋值
     val authorization = MutableLiveData<String>()
@@ -149,10 +107,10 @@ class NwunetViewModel(val wenetSpBean: WenetSpBean) : ViewModel() {
     val rmPasswordLiveData = MutableLiveData<Boolean>()
 
     init {
-        name = wenetSpBean.name
-        password = wenetSpBean.password
-        autoLoginLiveData.value = wenetSpBean.autoLogin
-        rmPasswordLiveData.value = wenetSpBean.rmPassword
+        name = netSpBean.name
+        password = netSpBean.password
+        autoLoginLiveData.value = netSpBean.autoLogin
+        rmPasswordLiveData.value = netSpBean.rmPassword
     }
 
     var netAvailable = false
@@ -177,18 +135,12 @@ class NwunetViewModel(val wenetSpBean: WenetSpBean) : ViewModel() {
 
 
     /**
-     * 登陆校园网
+     * 登陆wenet校园网
      */
-    fun loginNwuStudent() {
-
-
-        //根据ip修改连接
-        var url =
-            "http://10.16.0.12:8081/?usermac=XX:XX:XX:XX:XX:XX&userip=MYIP&origurl=http://edge.microsoft.com/captiveportal/generate_204&nasip=10.100.0.1"
-        url = url.replace("MYIP", IpAddressByWifi)
+    fun loginWenet() {
 
         val loginPostBody = LoginPostBody(
-            redirectUrl = url,
+            redirectUrl = "213",
             webAuthUser = name,
             webAuthPassword = password
         )
@@ -199,30 +151,23 @@ class NwunetViewModel(val wenetSpBean: WenetSpBean) : ViewModel() {
 
     private var loginDeviceLiveData = MutableLiveData<LoginPostBody>()
 
-    val loginLiveData = Transformations.switchMap(loginDeviceLiveData) { loginPostBody ->
-        Repository.loginDevices(loginPostBody)
-    }
+    val loginLiveData = Transformations.switchMap(loginDeviceLiveData) {  Repository.loginDevices()   }
 
     fun loginDevices(loginPostBody: LoginPostBody) {
         loginDeviceLiveData.value = loginPostBody
     }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    删除设备
 
+    /**
+     * 登陆nwunet校园网
+     */
 
-    private val deleteDeviceLiveData = MutableLiveData<DeleteBean>()
+    fun loginNwunet(){
+        val rawBody = "DDDDD=MYNAME&upass=MYPASSWORD&R1=0&R2=&R3=0&R6=0&para=00&0MKKey=123456&v6ip=&hid1=5256&hid2=14250008&cn=0&buttonClicked=&redirect_url=&err_flag=&username=&password=&user=&cmd=&Login="
+        rawBody.apply {
+            replace("MYNAME", name)
+            replace("MYPASSWORD", password)
+        }
 
-
-    val deleteLiveData = Transformations.switchMap(deleteDeviceLiveData) {
-        Repository.deleteDevice(it.authorization, it.deviceId)
     }
-
-    fun deleteDevice(authorization: String, deviceId: String) {
-        val deleteBean = DeleteBean(authorization, deviceId)
-        deleteDeviceLiveData.value = deleteBean
-    }
-
-
 }

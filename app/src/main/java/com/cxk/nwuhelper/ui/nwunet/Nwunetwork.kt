@@ -1,7 +1,6 @@
 package com.cxk.nwuhelper.ui.nwunet
 
 
-import com.cxk.nwuhelper.ui.wenet.model.LoginPostBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,12 +11,7 @@ import kotlin.coroutines.suspendCoroutine
 object Nwunetwork {
 
     private val nwuStudentService = ServiceCreator.create<NwunetService>()
-
-
-    suspend fun searchDevices(authorization:String) = nwuStudentService.searchDevices(authorization).await()
-    suspend fun loginDevices(loginPostBody: LoginPostBody) = nwuStudentService.loginDevice(loginPostBody).await()
-    suspend fun deleteDevice(authorization:String,deviceId:String) = nwuStudentService.deleteDevice(authorization,deviceId).await()
-
+    suspend fun loginDevices() = nwuStudentService.loginDevice("202032908","che1jian2jian3gg","123456").await()
 
     private suspend fun <T> Call<T>.await(): T {
         return suspendCoroutine { continuation ->
@@ -26,7 +20,7 @@ object Nwunetwork {
                     val body = response.body()
                     if (body != null) continuation.resume(body)
                     else continuation.resumeWithException(
-                        RuntimeException("respon body is null")
+                        RuntimeException("response body is null")
                     )
                 }
                 override fun onFailure(call: Call<T>, t: Throwable) {

@@ -11,10 +11,10 @@ import com.blankj.utilcode.util.NetworkUtils
 import com.cxk.nwuhelper.MyApplication.Companion.context
 import com.cxk.nwuhelper.ui.wenet.model.DeleteBean
 import com.cxk.nwuhelper.ui.wenet.model.LoginPostBody
-import com.cxk.nwuhelper.ui.wenet.model.WenetSpBean
+import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 
 
-class WenetViewModel(val wenetSpBean: WenetSpBean) : ViewModel() {
+class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,12 +60,11 @@ class WenetViewModel(val wenetSpBean: WenetSpBean) : ViewModel() {
 //                    .substring(serverAddressLocation1 + 16, serverAddressLocation2)
 //                serverAddress.showToast(context)
 
-//                Log.e("test123", "ip地址:$ipAddress,服务器地址:$serverAddress")
-//                Log.e("test123", "$linkProperties")\
                 IpAddressByWifi = NetworkUtils.getIpAddressByWifi()
                 val ServerAddressByWifi = NetworkUtils.getServerAddressByWifi()
                 val isWifiAvailable = NetworkUtils.isWifiAvailable()
 //                ("ip:${IpAddressByWifi},server:$ServerAddressByWifi").showToast(context)
+
                 Log.e("test123", "getIpAddressByWifi,$IpAddressByWifi")
                 Log.e("test123", "ServerAddressByWifi,$ServerAddressByWifi")
                 Log.e("test123", "isWifiAvailable,$isWifiAvailable")
@@ -148,10 +147,10 @@ class WenetViewModel(val wenetSpBean: WenetSpBean) : ViewModel() {
     val rmPasswordLiveData = MutableLiveData<Boolean>()
 
     init {
-        name = wenetSpBean.name
-        password = wenetSpBean.password
-        autoLoginLiveData.value = wenetSpBean.autoLogin
-        rmPasswordLiveData.value = wenetSpBean.rmPassword
+        name = netSpBean.name
+        password = netSpBean.password
+        autoLoginLiveData.value = netSpBean.autoLogin
+        rmPasswordLiveData.value = netSpBean.rmPassword
     }
 
     var netAvailable = false
@@ -178,7 +177,7 @@ class WenetViewModel(val wenetSpBean: WenetSpBean) : ViewModel() {
     /**
      * 登陆校园网
      */
-    fun loginNwuStudent() {
+    fun loginWenet() {
 
 
         //根据ip修改连接

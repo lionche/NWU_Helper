@@ -1,6 +1,6 @@
 package com.cxk.nwuhelper.ui.wenet.model
 
-data class WenetSpBean(
+data class NetSpBean(
     val name: String,
     val password: String,
     var rmPassword: Boolean,

@@ -1,29 +1,19 @@
 package com.cxk.nwuhelper.ui.nwunet
 
-import com.cxk.nwuhelper.ui.wenet.model.LoginPostBody
-import com.cxk.nwuhelper.ui.wenet.model.LoginResponse
-import com.cxk.nwuhelper.ui.wenet.model.SearchSessionsResponse
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.POST
 
 
 interface NwunetService {
-    //查询已链接的设备
-    @GET("session/list")
-    fun searchDevices(@Header("authorization") authorization: String): Call<SearchSessionsResponse>
-
 
     //登录设备
-    @Headers("Content-Type: application/json")
-    @POST("online?noCache=1616815922222")
-    fun loginDevice(@Body loginPostBody: LoginPostBody): Call<LoginResponse>
+    @FormUrlEncoded
+//    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @POST("a70.htm")
+    fun loginDevice(@Field("name") name: String,@Field("password") password :String,@Field("0MKKey") MKKey :String) :Call<ResponseBody>
 
-    //删除设备
-    @DELETE("session/acctUniqueId/{deviceId}")
-    fun deleteDevice(
-        @Header("authorization") authorization: String,
-        @Path("deviceId") deviceId: String
-        ): Call<ResponseBody>
 }
 

@@ -1,6 +1,5 @@
 package com.cxk.nwuhelper.ui.nwunet
 
-import android.app.AlertDialog
 import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -9,19 +8,16 @@ import com.cxk.nwuhelper.BaseConstant
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentNwunetBinding
 import com.cxk.nwuhelper.ui.base.BaseVMPFragment
-import com.cxk.nwuhelper.ui.wenet.model.SearchSessionsResponse
-import com.cxk.nwuhelper.ui.wenet.model.WenetSpBean
+import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.AppPrefsUtils
-import com.cxk.nwuhelper.utils.showToast
 import com.github.ybq.android.spinkit.sprite.Sprite
 import com.github.ybq.android.spinkit.style.DoubleBounce
-import java.lang.Thread.sleep
 
 
 class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>() {
 
     override fun onResume() {
-//        Log.d("huilai", "onResume: ")
+        Log.d("test123", "onResume: 网络检查")
         viewModel.netCheck()
         super.onResume()
     }
@@ -44,7 +40,7 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
                     }
                     false -> {
                         AppPrefsUtils.putBoolean(
-                            BaseConstant.IS_AUTO_LOGIN_STUDENT,
+                            BaseConstant.IS_AUTO_LOGIN_NWUNET,
                             viewModel.autoLoginLiveData.value!!
                         )
                         Log.d("gouxuan", "取消自动登陆")
@@ -65,7 +61,7 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
                         viewModel.judgeEnable()
 
                         if (viewModel.autoLoginLiveData.value == true) {
-                            viewModel.loginNwuStudent()
+                            viewModel.loginWenet()
                         }
 
 
@@ -89,21 +85,14 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
                         binding.btnSuccess.visibility = GONE
                         binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
                     }
-                    "2_devices" -> {
-                        viewModel.searchDeviceLiveData.value = viewModel.authorization.value
-                        binding.btnLogin.visibility = VISIBLE
-                        binding.progressBar.visibility = GONE
-                        binding.btnSuccess.visibility = GONE
-                        binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
-                    }
                     "login_success" -> {
 
                         AppPrefsUtils.putBoolean(
-                            BaseConstant.IS_REMEMBER_PASSWORD_STUDENT,
+                            BaseConstant.IS_REMEMBER_PASSWORD_NWUNET,
                             viewModel.rmPasswordLiveData.value!!
                         )
                         AppPrefsUtils.putBoolean(
-                            BaseConstant.IS_AUTO_LOGIN_STUDENT,
+                            BaseConstant.IS_AUTO_LOGIN_NWUNET,
                             viewModel.autoLoginLiveData.value!!
                         )
 
@@ -111,9 +100,9 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
                          * 判断是否记住密码
                          */
                         if (viewModel.rmPasswordLiveData.value!!) {
-                            AppPrefsUtils.putString(BaseConstant.NAME_STUDENT, viewModel.name)
+                            AppPrefsUtils.putString(BaseConstant.NAME_NWUNET, viewModel.name)
                             AppPrefsUtils.putString(
-                                BaseConstant.PASSWORD_STUDENT,
+                                BaseConstant.PASSWORD_NWUNET,
                                 viewModel.password
                             )
                             Log.d(
@@ -121,8 +110,8 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
                                 "loginNwuStudent: 保存用户为${viewModel.name},密码为${viewModel.password}"
                             )
                         } else {
-                            AppPrefsUtils.putString(BaseConstant.NAME_STUDENT, "")
-                            AppPrefsUtils.putString(BaseConstant.PASSWORD_STUDENT, "")
+                            AppPrefsUtils.putString(BaseConstant.NAME_NWUNET, "")
+                            AppPrefsUtils.putString(BaseConstant.PASSWORD_NWUNET, "")
                         }
 
                         binding.progressBar.visibility = GONE
@@ -138,76 +127,13 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
                 }
             })
 
-        viewModel.deviceLiveData.observe(this,
-            { result ->
-                val sessionsList = result.getOrNull()
-                sessionsList?.let {
-//                viewModel.deviceList = it as ArrayList<SearchSessionsResponse.Sessions>
-                    showDialog(it)
-                } ?: let {
-                    Log.d("test123", "没有连接设备")
-                }
-            })
         viewModel.loginLiveData.observe(this,
             { result ->
                 result.getOrNull()?.apply {
-                    Log.d("test123", "token:$token")
-                    viewModel.authorization.value = token
-
-                    if (this.statusCode == 200) {
-                        Log.d("test123", "登陆成功")
-                        "登陆成功啦".showToast(requireContext())
-                        viewModel.buttonState.value = "login_success"
-                    } else {
-                        this.errorDescription.apply {
-                            when (this.first()) {
-                                //pc already have 2 sessions
-                                'p' -> {
-//                                    "已登陆2台设备".showToast(requireContext())
-                                    viewModel.buttonState.value = "2_devices"
-
-                                }
-                                //invalid username or password
-                                'i' -> {
-
-                                    "用户名或密码错误".showToast(requireContext())
-
-                                    viewModel.buttonState.value = "wrong_password"
-                                }
-
-                                //NAS no response
-                                'N' -> {
-                                    "是不是连错网了".showToast(requireContext())
-                                    viewModel.buttonState.value = "wifi_not_available"
-
-                                }
-                                //authentication rejected
-                                //删除了设备马上重新登陆会出现这个问题
-                                'a' -> {
-//                                    "等会再登陆".showToast(requireContext())
-                                    sleep(800)
-                                    viewModel.loginNwuStudent()
-
-                                }
-
-                            }
-
-                        }
-                        Log.d("test123", "登陆失败:原因:${this.errorDescription}")
-                    }
+                    Log.d("nwutest", "observerData: $this")
                 }
             })
-        viewModel.deleteLiveData.observe(this,
-            { result ->
-                result.getOrNull()?.let { Log.d("test123", "删除成功") }
-                    ?: let {
-                        Log.d(
-                            "test123",
-                            "设备码或者token错误"
-                        )
-                    }
 
-            })
 
         //设置过度动画特效
         val doubleBounce: Sprite = DoubleBounce()
@@ -218,7 +144,6 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
         /**
          * 检测是否连接校园网
          */
-        viewModel.netCheck()
 
         /**
          * 检测是否为自动登录
@@ -228,10 +153,10 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
         binding.mushroom.setOnClickListener {
 
             //保存用户名密码
-            val rm = AppPrefsUtils.getBoolean(BaseConstant.IS_REMEMBER_PASSWORD_STUDENT)
-            val auto = AppPrefsUtils.getBoolean(BaseConstant.IS_AUTO_LOGIN_STUDENT)
-            val name = AppPrefsUtils.getString(BaseConstant.NAME_STUDENT)
-            val password = AppPrefsUtils.getString(BaseConstant.PASSWORD_STUDENT)
+            val rm = AppPrefsUtils.getBoolean(BaseConstant.IS_REMEMBER_PASSWORD_NWUNET)
+            val auto = AppPrefsUtils.getBoolean(BaseConstant.IS_AUTO_LOGIN_NWUNET)
+            val name = AppPrefsUtils.getString(BaseConstant.NAME_NWUNET)
+            val password = AppPrefsUtils.getString(BaseConstant.PASSWORD_NWUNET)
             Log.d("gouxuan", "是否记住密码$rm,是否自动登录$auto,用户名$name,密码$password")
 //            viewModel.authorization.value?.let {
 //                viewModel.searchDeviceLiveData.value = it
@@ -263,56 +188,18 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
     }
 
 
-    private fun showDialog(list: List<SearchSessionsResponse.Sessions>) {
-        val loginDevices = list.map { it.deviceType }.toTypedArray()
-
-        AlertDialog.Builder(requireContext()).apply {
-            setTitle("放弃设备")
-            setCancelable(false)
-            setNeutralButton("离开") { dialog, which -> }
-
-            for (item in loginDevices) {
-                Log.e("test123", "showDialog: $item")
-            }
-            val selectDevices: MutableList<Int> = ArrayList()
-            setMultiChoiceItems(loginDevices, null) { dialog, which, isChecked ->
-                if (isChecked) {
-                    selectDevices.add(which)
-                } else {
-                    selectDevices.remove(which)
-                }
-            }
-            setPositiveButton("确认") { dialog, which ->
-                for (deviceIndex in selectDevices) {
-                    viewModel.deleteDevice(
-                        viewModel.authorization.value!!, list.map { it.acct_unique_id }[deviceIndex]
-                    )
-                    Log.e("test123", "选择放弃的设备：${loginDevices[deviceIndex]}")
-                }
-                if (selectDevices.size != 0) {
-                    viewModel.loginNwuStudent()
-                }
-
-
-            }
-            show()
-        }
-
-    }
-
-
     override fun getSubLayoutId() = R.layout.fragment_nwunet
     override fun getSubVMClass() = NwunetViewModel::class.java
     override fun initViewModel() {
-        val IS_AUTO_LOGIN = AppPrefsUtils.getBoolean(BaseConstant.IS_AUTO_LOGIN_STUDENT)
+        val IS_AUTO_LOGIN = AppPrefsUtils.getBoolean(BaseConstant.IS_AUTO_LOGIN_NWUNET)
         val IS_REMEMBER_PASSWORD =
-            AppPrefsUtils.getBoolean(BaseConstant.IS_REMEMBER_PASSWORD_STUDENT)
-        val NAME_STUDENT = AppPrefsUtils.getString(BaseConstant.NAME_STUDENT)
-        val PASSWORD_STUDENT = AppPrefsUtils.getString(BaseConstant.PASSWORD_STUDENT)
+            AppPrefsUtils.getBoolean(BaseConstant.IS_REMEMBER_PASSWORD_NWUNET)
+        val NAME_NWUNET = AppPrefsUtils.getString(BaseConstant.NAME_NWUNET)
+        val PASSWORD_NWUNET = AppPrefsUtils.getString(BaseConstant.PASSWORD_NWUNET)
 
-        val homeSpBean =
-            WenetSpBean(NAME_STUDENT!!, PASSWORD_STUDENT!!, IS_REMEMBER_PASSWORD, IS_AUTO_LOGIN)
-        viewModel = ViewModelProvider(this, NwunetViewModelFactory(homeSpBean)).get(getSubVMClass())
+        val NwunetSpBean =
+            NetSpBean(NAME_NWUNET!!, PASSWORD_NWUNET!!, IS_REMEMBER_PASSWORD, IS_AUTO_LOGIN)
+        viewModel = ViewModelProvider(this, NwunetViewModelFactory(NwunetSpBean)).get(getSubVMClass())
     }
 
 

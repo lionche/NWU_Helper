@@ -1,12 +1,12 @@
 package com.cxk.nwuhelper.ui.wenet
 
-import com.cxk.nwuhelper.BaseConstant.NWU_STUDENT_URL
+import com.cxk.nwuhelper.BaseConstant.WENET_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ServiceCreator {
     private val retrofit = Retrofit.Builder()
-        .baseUrl(NWU_STUDENT_URL)
+        .baseUrl(WENET_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

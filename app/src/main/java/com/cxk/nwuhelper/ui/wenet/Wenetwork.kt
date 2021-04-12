@@ -25,7 +25,7 @@ object Wenetwork {
                     val body = response.body()
                     if (body != null) continuation.resume(body)
                     else continuation.resumeWithException(
-                        RuntimeException("respon body is null")
+                        RuntimeException("response body is null")
                     )
                 }
                 override fun onFailure(call: Call<T>, t: Throwable) {
