@@ -98,6 +98,8 @@ class WenetFragment : BaseVMPFragment<FragmentWenetBinding, WenetViewModel>() {
                     }
                     "login_success" -> {
 
+                        binding.mushroom.setImageResource(R.drawable.mushroom)
+
                         AppPrefsUtils.putBoolean(
                             BaseConstant.IS_REMEMBER_PASSWORD_WENET,
                             viewModel.rmPasswordLiveData.value!!

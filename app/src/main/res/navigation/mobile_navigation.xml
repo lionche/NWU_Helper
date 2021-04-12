@@ -17,9 +17,9 @@
         android:label="@string/title_nwunet"
         tools:layout="@layout/fragment_nwunet" />
 
-    <fragment
-        android:id="@+id/navigation_score"
-        android:name="com.cxk.nwuhelper.ui.score.DashboardFragment"
-        android:label="@string/title_score"
-        tools:layout="@layout/fragment_dashboard" />
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_score"-->
+<!--        android:name="com.cxk.nwuhelper.ui.score.DashboardFragment"-->
+<!--        android:label="@string/title_score"-->
+<!--        tools:layout="@layout/fragment_dashboard" />-->
 </navigation>

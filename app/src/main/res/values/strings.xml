@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NWU Helper</string>
+    <string name="app_name">蘑菇助手</string>
     <string name="title_wenet">WENET</string>
     <string name="title_nwunet">NWUNET</string>
     <string name="title_score">成绩</string>
