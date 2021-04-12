@@ -155,7 +155,7 @@
             android:insetTop="0dp"
             android:insetRight="0dp"
             android:insetBottom="0dp"
-            android:onClick="@{()-> model.loginWenet()}"
+            android:onClick="@{()-> model.loginNwunet()}"
             android:padding="0dp"
             android:visibility="gone"
             app:cornerRadius="100dp"

@@ -10,7 +10,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.blankj.utilcode.util.NetworkUtils
 import com.cxk.nwuhelper.MyApplication.Companion.context
-import com.cxk.nwuhelper.ui.wenet.model.LoginPostBody
+import com.cxk.nwuhelper.ui.nwunet.model.LoginBean
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 
 
@@ -93,9 +93,6 @@ class NwunetViewModel(netSpBean: NetSpBean) : ViewModel() {
     }
 
 
-
-    //登陆时赋值
-    val authorization = MutableLiveData<String>()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //    登陆设备
@@ -135,39 +132,29 @@ class NwunetViewModel(netSpBean: NetSpBean) : ViewModel() {
 
 
     /**
-     * 登陆wenet校园网
-     */
-    fun loginWenet() {
-
-        val loginPostBody = LoginPostBody(
-            redirectUrl = "213",
-            webAuthUser = name,
-            webAuthPassword = password
-        )
-        loginDevices(loginPostBody)
-        buttonState.value = "start_to_login"
-
-    }
-
-    private var loginDeviceLiveData = MutableLiveData<LoginPostBody>()
-
-    val loginLiveData = Transformations.switchMap(loginDeviceLiveData) {  Repository.loginDevices()   }
-
-    fun loginDevices(loginPostBody: LoginPostBody) {
-        loginDeviceLiveData.value = loginPostBody
-    }
-
-
-    /**
      * 登陆nwunet校园网
      */
 
-    fun loginNwunet(){
-        val rawBody = "DDDDD=MYNAME&upass=MYPASSWORD&R1=0&R2=&R3=0&R6=0&para=00&0MKKey=123456&v6ip=&hid1=5256&hid2=14250008&cn=0&buttonClicked=&redirect_url=&err_flag=&username=&password=&user=&cmd=&Login="
-        rawBody.apply {
-            replace("MYNAME", name)
-            replace("MYPASSWORD", password)
-        }
 
+    fun loginNwunet() {
+
+        val loginBean = LoginBean(name,password)
+        loginDevices(loginBean)
+        buttonState.value = "start_to_login"
     }
+
+    private var loginDeviceLiveData = MutableLiveData<LoginBean>()
+
+    val loginLiveData =
+        Transformations.switchMap(loginDeviceLiveData) { LoginBean->
+            Repository.loginDevices(LoginBean.name,LoginBean.password) }
+
+    fun loginDevices(loginBean: LoginBean) {
+        loginDeviceLiveData.value = loginBean
+    }
+
+    var loginResponseLiveData = MutableLiveData<String>()
+
+
+
 }

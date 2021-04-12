@@ -11,9 +11,12 @@ interface NwunetService {
 
     //登录设备
     @FormUrlEncoded
-//    @Headers("Content-Type: application/x-www-form-urlencoded")
     @POST("a70.htm")
-    fun loginDevice(@Field("name") name: String,@Field("password") password :String,@Field("0MKKey") MKKey :String) :Call<ResponseBody>
+    fun loginDevice(
+        @Field("DDDDD") name: String,
+        @Field("upass") password: String,
+        @Field("0MKKey") MKKey: String
+    ): Call<ResponseBody>
 
 }
 

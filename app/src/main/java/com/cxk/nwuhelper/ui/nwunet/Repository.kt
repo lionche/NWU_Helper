@@ -7,8 +7,8 @@ import kotlin.coroutines.CoroutineContext
 
 object Repository {
 
-    fun loginDevices() = fire(Dispatchers.IO) {
-            val loginResponse = Nwunetwork.loginDevices()
+    fun loginDevices(name :String, password :String) = fire(Dispatchers.IO) {
+            val loginResponse = Nwunetwork.loginDevices(name,password)
             Result.success(loginResponse)
         }
 

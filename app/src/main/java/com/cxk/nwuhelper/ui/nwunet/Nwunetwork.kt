@@ -11,7 +11,7 @@ import kotlin.coroutines.suspendCoroutine
 object Nwunetwork {
 
     private val nwuStudentService = ServiceCreator.create<NwunetService>()
-    suspend fun loginDevices() = nwuStudentService.loginDevice("202032908","che1jian2jian3gg","123456").await()
+    suspend fun loginDevices(name :String, password :String) = nwuStudentService.loginDevice(name,password,"123456").await()
 
     private suspend fun <T> Call<T>.await(): T {
         return suspendCoroutine { continuation ->
