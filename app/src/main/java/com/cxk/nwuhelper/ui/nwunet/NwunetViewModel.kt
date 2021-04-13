@@ -40,7 +40,7 @@ class NwunetViewModel(netSpBean: NetSpBean) : ViewModel() {
 //                Log.e("test123", "getIpAddressByWifi,$IpAddressByWifi")
 
 
-                if("10.1" in IpAddressByWifi ||"10.21" in IpAddressByWifi){
+                if("10.8" in IpAddressByWifi){
                     buttonState.postValue("wifi_available")
                 }else{
                     buttonState.postValue("wifi_not_available")
