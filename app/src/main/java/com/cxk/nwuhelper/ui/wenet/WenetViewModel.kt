@@ -13,6 +13,10 @@ import com.cxk.nwuhelper.ui.wenet.model.DeleteBean
 import com.cxk.nwuhelper.ui.wenet.model.LoginPostBody
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.showToast
+import java.net.InetAddress
+import java.net.NetworkInterface
+import java.net.SocketException
+import java.util.*
 
 
 class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
@@ -23,6 +27,7 @@ class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
 
     val buttonState = MutableLiveData<String>()
     lateinit var IpAddressByWifi: String
+
 
     fun netCheck() {
 //        获取 ConnectivityManager 的实例
@@ -46,70 +51,39 @@ class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
 //                Log.e("test123", "The default network changed capabilities: " + networkCapabilities)
 //            }
 
+
             override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
 
-//                val linkAddresses = linkProperties.linkAddresses
-//                val linkAddresses1 = linkAddresses.toString().indexOf("64, ")
-//                val linkAddresses2 = linkAddresses.toString().lastIndexOf('/')
-//
-//                ipAddress = linkAddresses.toString()
-//                    .substring(linkAddresses1 + 4, linkAddresses2)
-//
-//                val serverAddressLocation1 = linkProperties.toString().indexOf("ServerAddress")
-//                val serverAddressLocation2 = linkProperties.toString().indexOf("TcpBufferSizes")
-//                val serverAddress = linkProperties.toString()
-//                    .substring(serverAddressLocation1 + 16, serverAddressLocation2)
-//                serverAddress.showToast(context)
 
                 IpAddressByWifi = NetworkUtils.getIpAddressByWifi()
-                val ServerAddressByWifi = NetworkUtils.getServerAddressByWifi()
-                val isWifiAvailable = NetworkUtils.isWifiAvailable()
-                ("ip:${IpAddressByWifi},server:$ServerAddressByWifi").showToast(context)
 
                 Log.e("test123", "getIpAddressByWifi,$IpAddressByWifi")
-                Log.e("test123", "ServerAddressByWifi,$ServerAddressByWifi")
-                Log.e("test123", "isWifiAvailable,$isWifiAvailable")
 
 
-                if (!isWifiAvailable) {
-//                    "请打开Wi-Fi".showToast(context)
-                    buttonState.postValue("wifi_not_available")
-                } else if ("192.168" in ServerAddressByWifi) {
-//                    "暂时不支持路由器".showToast(context)
-                    buttonState.postValue("wifi_not_available")
-                } else if ("254.254" in ServerAddressByWifi) {
-//                    "可以登陆".showToast(context)
+                if("10.8" in IpAddressByWifi){
                     buttonState.postValue("wifi_available")
-                } else if ("172.18.6.6" in ServerAddressByWifi) {
-//                    "暂时不支持NWUNET".showToast(context)
-                    buttonState.postValue("wifi_not_available")
-                } else {
-//                    "流量".showToast(context)
+                }else{
                     buttonState.postValue("wifi_not_available")
                 }
 
-
-//                when (serverAddress.split('.')[0]) {
-//                    "10" -> {
-//                        buttonState.postValue("wifi_available")
-////                        Toast.makeText(context, "ip地址:$ipAddress,服务器地址:$serverAddress", Toast.LENGTH_SHORT).show()
-////                        Toast.makeText(context, "欢迎登陆", Toast.LENGTH_SHORT).show()
-//                    }
-//                    "172" -> {
-//                        "暂时不支持NWUNET".showToast(context)
-//                        buttonState.postValue("wifi_not_available")
-//
-//                    }
-//                    "192" -> {
-//                        "暂时不支持路由器".showToast(context)
-//                        buttonState.postValue("wifi_not_available")
-//                    }
-//                    else -> {
-////                        "请连接校园网".showToast(context)
-//                        buttonState.postValue("wifi_not_available")
-//                    }
-//
+//                if ("192.168" in IpAddressByWifi) {
+//                    "暂时不支持路由器".showToast(context)
+//                    Log.d("test123", "onLinkPropertiesChanged:暂时不支持路由器 ")
+//                    buttonState.postValue("wifi_not_available")
+//                } else if ("10.1" in IpAddressByWifi) {
+////                    "可以登陆".showToast(context)
+//                    Log.d("test123", "onLinkPropertiesChanged:可以登陆2.4gip$IpAddressByWifi ")
+//                    buttonState.postValue("wifi_available")
+//                } else if ("10.8" in IpAddressByWifi) {
+//                    "暂时不支持NWUNET".showToast(context)
+//                    Log.d("test123", "onLinkPropertiesChanged:暂时不支持NWUNET ")
+//                    buttonState.postValue("wifi_not_available")
+//                } else {
+////                    "流量".showToast(context)
+////                    Log.d("test123", "onLinkPropertiesChanged:流量 ")
+//                    buttonState.postValue("wifi_not_available")
 //                }
+
 
             }
         })

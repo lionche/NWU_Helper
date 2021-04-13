@@ -32,57 +32,17 @@ class NwunetViewModel(netSpBean: NetSpBean) : ViewModel() {
 
         connectivityManager.registerDefaultNetworkCallback(object :
             ConnectivityManager.NetworkCallback() {
-//            override fun onAvailable(network: Network) {
-//                Log.e("test123", "现在的网络是$")
-//            }
-
-//            override fun onLost(network : Network) {
-//                Log.e("test123", "刚刚断开网络,刚才连接的是 " + network)
-//            }
-//
-//            override fun onCapabilitiesChanged(network : Network, networkCapabilities : NetworkCapabilities) {
-//                Log.e("test123", "The default network changed capabilities: " + networkCapabilities)
-//            }
 
             override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
 
+                val IpAddressByWifi = NetworkUtils.getIpAddressByWifi()
 
-//                val linkAddresses = linkProperties.linkAddresses
-//                val linkAddresses1 = linkAddresses.toString().indexOf("64, ")
-//                val linkAddresses2 = linkAddresses.toString().lastIndexOf('/')
-//
-//                ipAddress = linkAddresses.toString()
-//                    .substring(linkAddresses1 + 4, linkAddresses2)
-//
-//                val serverAddressLocation1 = linkProperties.toString().indexOf("ServerAddress")
-//                val serverAddressLocation2 = linkProperties.toString().indexOf("TcpBufferSizes")
-//                val serverAddress = linkProperties.toString()
-//                    .substring(serverAddressLocation1 + 16, serverAddressLocation2)
-//                serverAddress.showToast(context)
-
-//                Log.e("test123", "ip地址:$ipAddress,服务器地址:$serverAddress")
-//                Log.e("test123", "$linkProperties")\
-                val ServerAddressByWifi = NetworkUtils.getServerAddressByWifi()
-                val isWifiAvailable = NetworkUtils.isWifiAvailable()
-                Log.d("test123", "ServerAddressByWifi,$ServerAddressByWifi")
-                Log.d("test123", "isWifiAvailable,$isWifiAvailable")
+//                Log.e("test123", "getIpAddressByWifi,$IpAddressByWifi")
 
 
-
-                if (!isWifiAvailable) {
-//                    "请打开Wi-Fi".showToast(context)
-                    buttonState.postValue("wifi_not_available")
-                } else if ("192.168" in ServerAddressByWifi) {
-//                    "暂时不支持路由器".showToast(context)
-                    buttonState.postValue("wifi_not_available")
-                } else if (".254.254" in ServerAddressByWifi) {
-//                    "可以登陆".showToast(context)
-                    buttonState.postValue("wifi_not_available")
-                } else if ("172.18.6.6" in ServerAddressByWifi) {
-//                    "暂时不支持NWUNET".showToast(context)
+                if("10.1" in IpAddressByWifi ||"10.21" in IpAddressByWifi){
                     buttonState.postValue("wifi_available")
-                } else {
-//                    "流量".showToast(context)
+                }else{
                     buttonState.postValue("wifi_not_available")
                 }
             }

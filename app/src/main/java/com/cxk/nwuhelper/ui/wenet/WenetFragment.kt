@@ -54,6 +54,7 @@ class WenetFragment : BaseVMPFragment<FragmentWenetBinding, WenetViewModel>() {
 
         viewModel.buttonState.observe(this,
             {
+                Log.d("test123", "按键切换: $it")
                 when (it) {
                     "wifi_available" -> {
                         binding.progressBar.visibility = GONE
