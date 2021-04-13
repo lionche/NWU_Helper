@@ -151,6 +151,8 @@ class WenetFragment : BaseVMPFragment<FragmentWenetBinding, WenetViewModel>() {
         })
         viewModel.loginLiveData.observe(this,
             { result ->
+                Log.d("test123", "$result")
+
                 result.getOrNull()?.apply {
                     Log.d("test123", "token:$token")
                     viewModel.authorization.value = token

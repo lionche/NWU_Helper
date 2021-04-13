@@ -12,7 +12,6 @@ import com.cxk.nwuhelper.MyApplication.Companion.context
 import com.cxk.nwuhelper.ui.wenet.model.DeleteBean
 import com.cxk.nwuhelper.ui.wenet.model.LoginPostBody
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
-import com.cxk.nwuhelper.utils.showToast
 
 
 class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
@@ -55,8 +54,8 @@ class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
 
                 Log.e("test123", "getIpAddressByWifi,$IpAddressByWifi")
 
-                IpAddressByWifi.showToast(context)
-                if("10.1" in IpAddressByWifi ||"10.21" in IpAddressByWifi){
+//                IpAddressByWifi.showToast(context)
+                if("10.1" in IpAddressByWifi){
                     buttonState.postValue("wifi_available")
                 }else{
                     buttonState.postValue("wifi_not_available")
@@ -149,7 +148,6 @@ class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
      */
     fun loginWenet() {
 
-
         //根据ip修改连接
         var url =
             "http://10.16.0.12:8081/?usermac=XX:XX:XX:XX:XX:XX&userip=MYIP&origurl=http://edge.microsoft.com/captiveportal/generate_204&nasip=10.100.0.1"
@@ -160,6 +158,9 @@ class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
             webAuthUser = name,
             webAuthPassword = password
         )
+
+        Log.d("test123", "loginWenet:点击登录 $loginPostBody")
+
         loginDevices(loginPostBody)
         buttonState.value = "start_to_login"
 

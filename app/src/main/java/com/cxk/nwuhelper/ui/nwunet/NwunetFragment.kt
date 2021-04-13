@@ -136,7 +136,6 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
         })
 
         viewModel.loginResponseLiveData.observe(this, { result ->
-            Log.d("nwutest", "数据改变")
             Log.d("nwutest", "$result")
 
             if ("认证成功页" in result) {
