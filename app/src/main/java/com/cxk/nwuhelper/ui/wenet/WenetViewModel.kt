@@ -13,10 +13,6 @@ import com.cxk.nwuhelper.ui.wenet.model.DeleteBean
 import com.cxk.nwuhelper.ui.wenet.model.LoginPostBody
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.showToast
-import java.net.InetAddress
-import java.net.NetworkInterface
-import java.net.SocketException
-import java.util.*
 
 
 class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
@@ -59,7 +55,7 @@ class WenetViewModel(val netSpBean: NetSpBean) : ViewModel() {
 
                 Log.e("test123", "getIpAddressByWifi,$IpAddressByWifi")
 
-
+                IpAddressByWifi.showToast(context)
                 if("10.1" in IpAddressByWifi ||"10.21" in IpAddressByWifi){
                     buttonState.postValue("wifi_available")
                 }else{

@@ -86,6 +86,9 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
                 }
                 "login_success" -> {
 
+                    binding.mushroom.setImageResource(R.drawable.mushroom)
+
+
                     AppPrefsUtils.putBoolean(
                         BaseConstant.IS_REMEMBER_PASSWORD_NWUNET,
                         viewModel.rmPasswordLiveData.value!!
