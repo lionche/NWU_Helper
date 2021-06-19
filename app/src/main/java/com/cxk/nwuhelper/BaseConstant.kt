@@ -17,7 +17,8 @@ object BaseConstant {
     const val PASSWORD_WENET = "PASSWORD_WENET"
 
     //NWUNET
-    const val NWUNET_URL = "http://10.0.1.242/"
+//    const val NWUNET_URL = "http://10.0.1.242/"
+    const val NWUNET_URL = "http://10.0.1.165/"
     const val IS_AUTO_LOGIN_NWUNET = "IS_AUTO_LOGIN_NWUNET"
     const val IS_REMEMBER_PASSWORD_NWUNET = "IS_REMEMBER_PASSWORD_NWUNET"
     const val NAME_NWUNET = "NAME_NWUNET"
