@@ -7,7 +7,7 @@ object BaseConstant {
     const val NWU_LOGIN_URL = "http://authserver.nwu.edu.cn/authserver/login"
     const val NWU_LOGIN_URL_BASE = "http://authserver.nwu.edu.cn/authserver/"
     //登陆统一门户后,查询成绩
-    const val SCORE_URL = "http://yjsxt.nwu.edu.cn/procedure/student/modifymidexam.htm"
+    const val SCORE_URL = "http://yjsxt.nwu.edu.cn/py/page/student/cjgrcx.htm"
 
     //WENET
     const val WENET_URL = "http://10.16.0.12:8081/portal/api/v2/"

@@ -110,14 +110,19 @@ class DashboardViewModel : ViewModel() {
 
 
     private fun giveScore(document: Document) {
-        val elements: Elements = document.getElementsByClass("tr-zj")
+        val elements: Elements = document.getElementsByTag("tbody").first().getElementsByTag("tr")
+//        Log.d("website3detail", elements.toString())
         val scoreMap: MutableMap<String, String> = HashMap()
 
 
         //        System.out.println(elements.first().getElementsByTag("td").get(0).text());
         for (value in elements) {
-            val subject: String = value.getElementsByTag("td")[0].text()
-            val score: String = value.getElementsByTag("td")[2].text()
+            Log.d("website3detail", value.toString()+"---")
+
+            val subject: String = value.getElementsByTag("td")[3].text()
+            val score: String = value.getElementsByTag("td")[4].text()
+            Log.d("website3detail", "$subject,$score")
+
 //            scoreMap.put(subject, score)
             scoreMap[subject] = score
         }
