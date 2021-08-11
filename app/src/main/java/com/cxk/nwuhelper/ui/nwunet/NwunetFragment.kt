@@ -155,23 +155,23 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
         binding.progressBar.setIndeterminateDrawable(doubleBounce)
     }
 
-    override fun initEvent() {
+//    override fun initEvent() {
 
 
-        binding.mushroom.setOnClickListener {
-
-            //保存用户名密码
-            val rm = AppPrefsUtils.getBoolean(BaseConstant.IS_REMEMBER_PASSWORD_NWUNET)
-            val auto = AppPrefsUtils.getBoolean(BaseConstant.IS_AUTO_LOGIN_NWUNET)
-            val name = AppPrefsUtils.getString(BaseConstant.NAME_NWUNET)
-            val password = AppPrefsUtils.getString(BaseConstant.PASSWORD_NWUNET)
-            Log.d("gouxuan", "是否记住密码$rm,是否自动登录$auto,用户名$name,密码$password")
-//            viewModel.authorization.value?.let {
-//                viewModel.searchDeviceLiveData.value = it
-//            } ?: let {
-//                "请先登陆".showToast(requireContext())
-//            }
-        }
+//        binding.mushroom.setOnClickListener {
+//
+//            //保存用户名密码
+//            val rm = AppPrefsUtils.getBoolean(BaseConstant.IS_REMEMBER_PASSWORD_NWUNET)
+//            val auto = AppPrefsUtils.getBoolean(BaseConstant.IS_AUTO_LOGIN_NWUNET)
+//            val name = AppPrefsUtils.getString(BaseConstant.NAME_NWUNET)
+//            val password = AppPrefsUtils.getString(BaseConstant.PASSWORD_NWUNET)
+//            Log.d("gouxuan", "是否记住密码$rm,是否自动登录$auto,用户名$name,密码$password")
+////            viewModel.authorization.value?.let {
+////                viewModel.searchDeviceLiveData.value = it
+////            } ?: let {
+////                "请先登陆".showToast(requireContext())
+////            }
+//        }
 
 
 //        binding.mushroom.setOnLongClickListener {
@@ -193,7 +193,7 @@ class NwunetFragment : BaseVMPFragment<FragmentNwunetBinding, NwunetViewModel>()
 //            Log.d("test123", "initEvent: 点击删除")
 //            viewModel.deleteDevice(viewModel.authorization, viewModel.deviceId)
 //        }
-    }
+//    }
 
 
     override fun getSubLayoutId() = R.layout.fragment_nwunet

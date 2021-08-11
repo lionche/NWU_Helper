@@ -223,7 +223,7 @@ class WenetFragment : BaseVMPFragment<FragmentWenetBinding, WenetViewModel>() {
         binding.progressBar.setIndeterminateDrawable(doubleBounce)
     }
 
-    override fun initEvent() {
+//    override fun initEvent() {
         /**
          * 检测是否连接校园网
          */
@@ -234,42 +234,42 @@ class WenetFragment : BaseVMPFragment<FragmentWenetBinding, WenetViewModel>() {
          */
 
 
-        binding.mushroom.setOnClickListener {
-
-            //保存用户名密码
-            val rm = AppPrefsUtils.getBoolean(BaseConstant.IS_REMEMBER_PASSWORD_WENET)
-            val auto = AppPrefsUtils.getBoolean(BaseConstant.IS_AUTO_LOGIN_WENET)
-            val name = AppPrefsUtils.getString(BaseConstant.NAME_WENET)
-            val password = AppPrefsUtils.getString(BaseConstant.PASSWORD_WENET)
-            Log.d("gouxuan", "是否记住密码$rm,是否自动登录$auto,用户名$name,密码$password")
-//            viewModel.authorization.value?.let {
-//                viewModel.searchDeviceLiveData.value = it
-//            } ?: let {
-//                "请先登陆".showToast(requireContext())
-//            }
-        }
-
-
-//        binding.mushroom.setOnLongClickListener {
-//            Log.d("test123", "initEvent: 点击删除设备")
-//            viewModel.authorization.value?.let {
-////                viewModel.deleteDevice(
-////                    it,
-////                    viewModel.deviceList[0].acct_unique_id
-////                )
-//            }
-//            true
-//        }
-//        binding.btnLogin.setOnClickListener {
-//            Log.d("test123", "initEvent: 点击登录")
-//            viewModel.loginDevices(viewModel.loginPostBody)
+//        binding.mushroom.setOnClickListener {
 //
+//            //保存用户名密码
+//            val rm = AppPrefsUtils.getBoolean(BaseConstant.IS_REMEMBER_PASSWORD_WENET)
+//            val auto = AppPrefsUtils.getBoolean(BaseConstant.IS_AUTO_LOGIN_WENET)
+//            val name = AppPrefsUtils.getString(BaseConstant.NAME_WENET)
+//            val password = AppPrefsUtils.getString(BaseConstant.PASSWORD_WENET)
+//            Log.d("gouxuan", "是否记住密码$rm,是否自动登录$auto,用户名$name,密码$password")
+////            viewModel.authorization.value?.let {
+////                viewModel.searchDeviceLiveData.value = it
+////            } ?: let {
+////                "请先登陆".showToast(requireContext())
+////            }
 //        }
-//        binding.btnDelete.setOnClickListener {
-//            Log.d("test123", "initEvent: 点击删除")
-//            viewModel.deleteDevice(viewModel.authorization, viewModel.deviceId)
-//        }
-    }
+//
+//
+////        binding.mushroom.setOnLongClickListener {
+////            Log.d("test123", "initEvent: 点击删除设备")
+////            viewModel.authorization.value?.let {
+//////                viewModel.deleteDevice(
+//////                    it,
+//////                    viewModel.deviceList[0].acct_unique_id
+//////                )
+////            }
+////            true
+////        }
+////        binding.btnLogin.setOnClickListener {
+////            Log.d("test123", "initEvent: 点击登录")
+////            viewModel.loginDevices(viewModel.loginPostBody)
+////
+////        }
+////        binding.btnDelete.setOnClickListener {
+////            Log.d("test123", "initEvent: 点击删除")
+////            viewModel.deleteDevice(viewModel.authorization, viewModel.deviceId)
+////        }
+//    }
 
 
     private fun showDialog(list: List<SearchSessionsResponse.Sessions>) {

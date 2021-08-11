@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_score"
-        android:name="com.cxk.nwuhelper.ui.score.DashboardFragment"
+        android:name="com.cxk.nwuhelper.ui.score.ScoreFragment"
         android:label="@string/title_score"
         tools:layout="@layout/fragment_dashboard" />
 </navigation>

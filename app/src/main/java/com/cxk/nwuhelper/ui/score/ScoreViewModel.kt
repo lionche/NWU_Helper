@@ -5,33 +5,43 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.cxk.nwuhelper.BaseConstant.NWU_LOGIN_URL
 import com.cxk.nwuhelper.BaseConstant.SCORE_URL
+import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.encrypt
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 
-class DashboardViewModel : ViewModel() {
+class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
 
-    var n = MutableLiveData("")
+    var name: String
+    var password: String
+    val autoLoginLiveData = MutableLiveData<Boolean>()
+    val rmPasswordLiveData = MutableLiveData<Boolean>()
 
-    val p = MutableLiveData("")
     val enable = MutableLiveData(false)
     val resultMap = MutableLiveData<MutableMap<String, String>>()
 
+    init {
+        name = netSpBean.name
+        password = netSpBean.password
+        autoLoginLiveData.value = netSpBean.autoLogin
+        rmPasswordLiveData.value = netSpBean.rmPassword
+    }
+
 
     private fun judgeEnable() {
-        enable.value = n.value!!.isNotEmpty() && p.value!!.isNotEmpty()
+        enable.value = name.isNotEmpty() && password.isNotEmpty()
         Log.d("password", "judgeEnable: ${enable.value}")
     }
 
     fun onPwdChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        p.value = s.toString()
+        password = s.toString()
         judgeEnable()
     }
 
     fun onNameChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        n.value = s.toString()
+        name = s.toString()
         judgeEnable()
     }
 
@@ -41,6 +51,7 @@ class DashboardViewModel : ViewModel() {
                 visitWebsite()
             }
         }.start()
+        buttonState.postValue("start_to_login")
     }
 
     fun visitWebsite() {
@@ -62,7 +73,7 @@ class DashboardViewModel : ViewModel() {
         val execution = stringStringMap["execution"]
         val passwordAfterEncrypt = stringStringMap["password"]
         val connect = Jsoup.connect(NWU_LOGIN_URL).cookies(cookies).followRedirects(false)
-        connect.data("username", n.value)
+        connect.data("username", name)
         connect.data("password", passwordAfterEncrypt)
         connect.data("lt", lt)
         connect.data("dllt", "userNamePasswordLogin")
@@ -72,10 +83,19 @@ class DashboardViewModel : ViewModel() {
         connect.method(Connection.Method.POST)
         val response = connect.execute()
         val cookies1 = response.cookies()
-        val document = Jsoup.parse(response.body())
-        Log.d("website2", document.toString())
+        val document = Jsoup.parse(response.body()).toString()
+        Log.d("website2", document)
 
-        searchScroe(cookies1)
+        //登陆成功
+        if ("This document you requested has moved temporarily" in document){
+            buttonState.postValue("login_success")
+            searchScroe(cookies1)
+        }
+        else {
+            buttonState.postValue("wrong_password")
+
+        }
+
     }
 
 
@@ -88,7 +108,7 @@ class DashboardViewModel : ViewModel() {
         //        System.out.println("lt:" + lt);
         val execution: String = document.getElementsByTag("input").eq(6).`val`()
         //        System.out.println("execution:" + execution);
-        val passwordAfterEncrypt = encrypt.Encrypt(p.value, aesKey)
+        val passwordAfterEncrypt = encrypt.Encrypt(password, aesKey)
         //        System.out.println("passwordAfterEncrypt:" + passwordAfterEncrypt);
         val map: MutableMap<String, String> = HashMap()
         map["password"] = passwordAfterEncrypt
@@ -131,6 +151,9 @@ class DashboardViewModel : ViewModel() {
 
 
     }
+
+    val buttonState = MutableLiveData<String>()
+
 
 
 }

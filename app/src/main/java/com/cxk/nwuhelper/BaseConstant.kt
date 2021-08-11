@@ -24,4 +24,10 @@ object BaseConstant {
     const val NAME_NWUNET = "NAME_NWUNET"
     const val PASSWORD_NWUNET = "PASSWORD_NWUNET"
 
+    //SCORE
+    const val IS_AUTO_LOGIN_SCORE = "IS_AUTO_LOGIN_SCORE"
+    const val IS_REMEMBER_PASSWORD_SCORE = "IS_REMEMBER_PASSWORD_SCORE"
+    const val NAME_SCORE = "NAME_SCORE"
+    const val PASSWORD_SCORE = "PASSWORD_SCORE"
+
 }
