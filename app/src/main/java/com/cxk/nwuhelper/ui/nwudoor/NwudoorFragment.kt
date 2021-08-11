@@ -124,6 +124,11 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
                 }
             })
 
+//        viewModel.cookieLiveData.observe(this,{
+//            Log.d("elementsScore", "searchScroe5: ${it}")
+//
+//        })
+
 
         //设置过度动画特效
         val doubleBounce: Sprite = DoubleBounce()
@@ -131,7 +136,10 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
     }
 
     override fun initEvent() {
+
         binding.buttonScore.setOnClickListener {
+            Log.d("elementsScore", "searchScroe6: ${viewModel.cookieLiveData.value}")
+
             Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.action_navigation_nwudoor_to_scroeFragment)
         }
     }

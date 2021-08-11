@@ -2,9 +2,11 @@ package com.cxk.nwuhelper.ui.nwudoor
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.cxk.nwuhelper.BaseConstant.NWU_LOGIN_URL
 import com.cxk.nwuhelper.BaseConstant.SCORE_URL
+import com.cxk.nwuhelper.ui.nwunet.Repository
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.encrypt
 import org.jsoup.Connection
@@ -45,18 +47,21 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         judgeEnable()
     }
 
-    fun visitWebsiteNewThread(): MutableMap<String, String> {
-        lateinit var cookie: MutableMap<String, String>
+    val cookieLiveData = MutableLiveData<MutableMap<String, String>>()
+
+
+    fun visitWebsiteNewThread(){
+
         object : Thread() {
             override fun run() {
-                cookie = visitWebsite()!!
+                visitWebsite()
             }
         }.start()
         buttonState.postValue("start_to_login")
-        return cookie
+
     }
 
-    fun visitWebsite(): MutableMap<String, String>? {
+    fun visitWebsite(){
         Log.d("chengji", "开始查询")
 
         val connect: Connection = Jsoup.connect(NWU_LOGIN_URL)
@@ -67,10 +72,9 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         val document = Jsoup.parse(response.body())
         Log.d("website1", document.toString())
         val stringStringMap: Map<String, String> = extractInfo(document)
-        val cookies1 = loginWebsite(cookies, stringStringMap)
-        return cookies1
-
+        cookieLiveData.postValue(loginWebsite(cookies, stringStringMap))
     }
+
 
 
     //登陆需要的cookie
@@ -133,7 +137,7 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
     }
 
 
-    fun searchScore(): Elements {
+    fun searchScore(cookies1:MutableMap<String, String>) {
         Log.d("website3", "访问website3")
 
         val connect =
@@ -145,7 +149,6 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         val elementsScore = document.getElementsByTag("tbody").first().getElementsByTag("tr")
         Log.d("elementsScorevm", "searchScroe: ${elementsScore}")
 
-        return elementsScore
 
 //        Log.d("elementsScore", "searchScroe: ${elementsScore.toString()}")
 //        giveScore(document)
