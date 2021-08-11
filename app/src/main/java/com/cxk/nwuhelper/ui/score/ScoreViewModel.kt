@@ -88,13 +88,29 @@ class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
 
         //登陆成功
         if ("This document you requested has moved temporarily" in document){
+
+            fun searchScroeNewThread() {
+                object : Thread() {
+                    override fun run() {
+                        searchScroe(cookies1)
+                    }
+                }.start()
+            }
+
+
             buttonState.postValue("login_success")
+
             searchScroe(cookies1)
+//            Handler(Looper.getMainLooper()).postDelayed({
+//                searchScroeNewThread()
+//            },670)
+
         }
         else {
             buttonState.postValue("wrong_password")
-
         }
+
+
 
     }
 
@@ -128,11 +144,11 @@ class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
     }
 
 
+    val scoreMap: MutableMap<String, String> = HashMap()
 
     private fun giveScore(document: Document) {
         val elements: Elements = document.getElementsByTag("tbody").first().getElementsByTag("tr")
 //        Log.d("website3detail", elements.toString())
-        val scoreMap: MutableMap<String, String> = HashMap()
 
 
         //        System.out.println(elements.first().getElementsByTag("td").get(0).text());
@@ -147,7 +163,7 @@ class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
             scoreMap[subject] = score
         }
 
-        resultMap.postValue(scoreMap)
+//        resultMap.postValue(scoreMap)
 
 
     }

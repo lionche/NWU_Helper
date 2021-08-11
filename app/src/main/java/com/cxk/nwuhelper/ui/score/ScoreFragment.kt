@@ -2,13 +2,15 @@ package com.cxk.nwuhelper.ui.score
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.cxk.nwuhelper.BaseConstant
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.ScoreActivity
-import com.cxk.nwuhelper.databinding.FragmentDashboardBinding
+import com.cxk.nwuhelper.databinding.FragmentScoreBinding
 import com.cxk.nwuhelper.ui.base.BaseVMPFragment
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.AppPrefsUtils
@@ -17,7 +19,7 @@ import com.github.ybq.android.spinkit.sprite.Sprite
 import com.github.ybq.android.spinkit.style.DoubleBounce
 
 
-class ScoreFragment : BaseVMPFragment<FragmentDashboardBinding, ScoreViewModel>() {
+class ScoreFragment : BaseVMPFragment<FragmentScoreBinding, ScoreViewModel>() {
 
     override fun observerData() {
         binding.model = viewModel
@@ -30,17 +32,45 @@ class ScoreFragment : BaseVMPFragment<FragmentDashboardBinding, ScoreViewModel>(
         viewModel.resultMap.observe(this, {
             it.let {
                 val intent = Intent(context, ScoreActivity::class.java)
-
                 val myMap = SerializableMap()
                 myMap.map = it//将map数据添加到封装的myMap中
-                val bundle =  Bundle()
+                val bundle = Bundle()
                 bundle.putSerializable("map", myMap)
                 intent.putExtras(bundle)
-
                 requireActivity().startActivity(intent)
             }
-        }
-        )
+        })
+
+        viewModel.rmPasswordLiveData.observe(this, {
+            when (it) {
+                false -> viewModel.autoLoginLiveData.value = false
+            }
+        })
+
+        viewModel.enable.observe(this, {
+            when (it) {
+                true -> {
+                    if (viewModel.autoLoginLiveData.value == true) {
+                        viewModel.visitWebsiteNewThread()
+                    }
+                }
+            }
+        })
+        viewModel.autoLoginLiveData.observe(this,
+            {
+                when (it) {
+                    true -> {
+                        viewModel.rmPasswordLiveData.value = true
+                    }
+                    false -> {
+                        AppPrefsUtils.putBoolean(
+                            BaseConstant.IS_AUTO_LOGIN_SCORE,
+                            viewModel.autoLoginLiveData.value!!
+                        )
+                        Log.d("gouxuan", "取消自动登陆")
+                    }
+                }
+            })
 
         viewModel.buttonState.observe(this,
             {
@@ -57,6 +87,8 @@ class ScoreFragment : BaseVMPFragment<FragmentDashboardBinding, ScoreViewModel>(
                         binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
                     }
                     "login_success" -> {
+
+
                         binding.mushroom.setImageResource(R.drawable.mushroom)
 
                         AppPrefsUtils.putBoolean(
@@ -86,6 +118,13 @@ class ScoreFragment : BaseVMPFragment<FragmentDashboardBinding, ScoreViewModel>(
                             AppPrefsUtils.putString(BaseConstant.PASSWORD_SCORE, "")
                         }
 
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            binding.buttonScore.visibility = View.VISIBLE
+                            binding.buttonReport.visibility = View.VISIBLE
+                        }, 800)
+
+
+
                         binding.progressBar.visibility = View.GONE
                         binding.btnSuccess.visibility = View.VISIBLE
                         binding.btnSuccess.apply {
@@ -99,16 +138,21 @@ class ScoreFragment : BaseVMPFragment<FragmentDashboardBinding, ScoreViewModel>(
                 }
             })
 
+
         //设置过度动画特效
         val doubleBounce: Sprite = DoubleBounce()
         binding.progressBar.setIndeterminateDrawable(doubleBounce)
-
-
     }
 
+    override fun initEvent() {
+        binding.buttonScore.setOnClickListener {
+//            viewModel.resultMap.postValue(viewModel.scoreMap)
+            viewModel.resultMap.value = viewModel.scoreMap
 
+        }
+    }
 
-    override fun getSubLayoutId() = R.layout.fragment_dashboard
+    override fun getSubLayoutId() = R.layout.fragment_score
     override fun getSubVMClass() = ScoreViewModel::class.java
 
     override fun initViewModel() {
