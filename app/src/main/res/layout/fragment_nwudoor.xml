@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
         <variable
             name="model"
-            type="com.cxk.nwuhelper.ui.score.ScoreViewModel"
+            type="com.cxk.nwuhelper.ui.nwudoor.NwudoorViewModel"
             />
     </data>
 

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="ScoreData"
-            type="com.cxk.nwuhelper.ScoreData" />
+            type="com.cxk.nwuhelper.ui.nwudoor.score.model.ScoreData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

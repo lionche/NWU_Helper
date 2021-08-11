@@ -18,8 +18,18 @@
         tools:layout="@layout/fragment_nwunet" />
 
     <fragment
-        android:id="@+id/navigation_score"
-        android:name="com.cxk.nwuhelper.ui.score.ScoreFragment"
+        android:id="@+id/navigation_nwudoor"
+        android:name="com.cxk.nwuhelper.ui.nwudoor.NwudoorFragment"
         android:label="@string/title_score"
-        tools:layout="@layout/fragment_score" />
+        tools:layout="@layout/fragment_nwudoor" >
+        <action
+            android:id="@+id/action_navigation_nwudoor_to_scroeFragment"
+            app:destination="@id/scroeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scroeFragment"
+        android:name="com.cxk.nwuhelper.ui.nwudoor.score.ScroeFragment"
+        android:label="ScroeFragment"
+        tools:layout="@layout/fragment_scroe"/>
+
 </navigation>

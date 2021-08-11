@@ -3,9 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.17502532928064843" />
+        <entry key="app/src/main/res/layout/activity_score.xml" value="0.17502532928064843" />
+        <entry key="app/src/main/res/layout/fragment_NWUDoor.xml" value="0.21875" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.17502532928064843" />
+        <entry key="app/src/main/res/layout/fragment_nwudoor.xml" value="0.21875" />
         <entry key="app/src/main/res/layout/fragment_nwunet.xml" value="0.17502532928064843" />
         <entry key="app/src/main/res/layout/fragment_score.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_scroe.xml" value="0.35989583333333336" />
         <entry key="app/src/main/res/layout/fragment_wenet.xml" value="0.17502532928064843" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.21875" />
       </map>

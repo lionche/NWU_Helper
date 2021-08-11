@@ -1,4 +1,4 @@
-package com.cxk.nwuhelper
+package com.cxk.nwuhelper.ui.nwudoor.score.model
 
 class ScoreData(
     var subject: String,

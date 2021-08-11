@@ -1,4 +1,4 @@
-package com.cxk.nwuhelper.ui.score
+package com.cxk.nwuhelper.ui.nwudoor
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +12,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 
-class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
+class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
+
 
     var name: String
     var password: String
@@ -20,7 +21,6 @@ class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
     val rmPasswordLiveData = MutableLiveData<Boolean>()
 
     val enable = MutableLiveData(false)
-    val resultMap = MutableLiveData<MutableMap<String, String>>()
 
     init {
         name = netSpBean.name
@@ -45,16 +45,18 @@ class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
         judgeEnable()
     }
 
-    fun visitWebsiteNewThread() {
+    fun visitWebsiteNewThread(): MutableMap<String, String> {
+        lateinit var cookie: MutableMap<String, String>
         object : Thread() {
             override fun run() {
-                visitWebsite()
+                cookie = visitWebsite()!!
             }
         }.start()
         buttonState.postValue("start_to_login")
+        return cookie
     }
 
-    fun visitWebsite() {
+    fun visitWebsite(): MutableMap<String, String>? {
         Log.d("chengji", "开始查询")
 
         val connect: Connection = Jsoup.connect(NWU_LOGIN_URL)
@@ -65,10 +67,17 @@ class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
         val document = Jsoup.parse(response.body())
         Log.d("website1", document.toString())
         val stringStringMap: Map<String, String> = extractInfo(document)
-        loginWebsite(cookies, stringStringMap)
+        val cookies1 = loginWebsite(cookies, stringStringMap)
+        return cookies1
+
     }
 
-    private fun loginWebsite(cookies: Map<String, String>, stringStringMap: Map<String, String>) {
+
+    //登陆需要的cookie
+    private fun loginWebsite(
+        cookies: Map<String, String>,
+        stringStringMap: Map<String, String>
+    ): MutableMap<String, String>? {
         val lt = stringStringMap["lt"]
         val execution = stringStringMap["execution"]
         val passwordAfterEncrypt = stringStringMap["password"]
@@ -82,34 +91,24 @@ class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
         connect.data("rmShown", "1")
         connect.method(Connection.Method.POST)
         val response = connect.execute()
+
         val cookies1 = response.cookies()
+
         val document = Jsoup.parse(response.body()).toString()
         Log.d("website2", document)
 
         //登陆成功
-        if ("This document you requested has moved temporarily" in document){
-
-            fun searchScroeNewThread() {
-                object : Thread() {
-                    override fun run() {
-                        searchScroe(cookies1)
-                    }
-                }.start()
-            }
-
+        if ("This document you requested has moved temporarily" in document) {
 
             buttonState.postValue("login_success")
 
-            searchScroe(cookies1)
-//            Handler(Looper.getMainLooper()).postDelayed({
-//                searchScroeNewThread()
-//            },670)
+//            searchScroe()
 
-        }
-        else {
+        } else {
             buttonState.postValue("wrong_password")
         }
 
+        return cookies1
 
 
     }
@@ -117,8 +116,8 @@ class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
 
     private fun extractInfo(document: Document): Map<String, String> {
         val aesKey: String =
-                document.getElementsByTag("head").first().getElementsByTag("script").eq(1).toString()
-                        .split("\"")[5]
+            document.getElementsByTag("head").first().getElementsByTag("script").eq(1).toString()
+                .split("\"")[5]
         //        System.out.println("aes key:" + aes_key);
         val lt: String = document.getElementsByTag("input").eq(4).`val`()
         //        System.out.println("lt:" + lt);
@@ -133,35 +132,42 @@ class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
         return map
     }
 
-    private fun searchScroe(cookies1: Map<String, String>) {
+
+    fun searchScore(): Elements {
         Log.d("website3", "访问website3")
-        val connect = Jsoup.connect(SCORE_URL).cookies(cookies1).followRedirects(true).timeout(10000)
+
+        val connect =
+            Jsoup.connect(SCORE_URL).cookies(cookies1).followRedirects(true).timeout(10000)
         connect.method(Connection.Method.GET)
         val response = connect.execute()
         val document = Jsoup.parse(response.body())
         Log.d("website3", document.toString())
-        giveScore(document)
+        val elementsScore = document.getElementsByTag("tbody").first().getElementsByTag("tr")
+        Log.d("elementsScorevm", "searchScroe: ${elementsScore}")
+
+        return elementsScore
+
+//        Log.d("elementsScore", "searchScroe: ${elementsScore.toString()}")
+//        giveScore(document)
     }
 
 
-    val scoreMap: MutableMap<String, String> = HashMap()
+//    val scoreMap: MutableMap<String, String> = HashMap()
 
     private fun giveScore(document: Document) {
-        val elements: Elements = document.getElementsByTag("tbody").first().getElementsByTag("tr")
 //        Log.d("website3detail", elements.toString())
 
-
         //        System.out.println(elements.first().getElementsByTag("td").get(0).text());
-        for (value in elements) {
-            Log.d("website3detail", value.toString()+"---")
-
-            val subject: String = value.getElementsByTag("td")[3].text()
-            val score: String = value.getElementsByTag("td")[4].text()
-            Log.d("website3detail", "$subject,$score")
-
-//            scoreMap.put(subject, score)
-            scoreMap[subject] = score
-        }
+//        for (value in elementsScore) {
+//            Log.d("website3detail", value.toString()+"---")
+//
+//            val subject: String = value.getElementsByTag("td")[3].text()
+//            val score: String = value.getElementsByTag("td")[4].text()
+//            Log.d("website3detail", "$subject,$score")
+//
+////            scoreMap.put(subject, score)
+//            scoreMap[subject] = score
+//        }
 
 //        resultMap.postValue(scoreMap)
 
@@ -169,7 +175,6 @@ class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
     }
 
     val buttonState = MutableLiveData<String>()
-
 
 
 }

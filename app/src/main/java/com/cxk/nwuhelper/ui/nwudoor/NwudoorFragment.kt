@@ -1,25 +1,23 @@
-package com.cxk.nwuhelper.ui.score
+package com.cxk.nwuhelper.ui.nwudoor
 
-import android.content.Intent
-import android.os.Bundle
+import android.app.Activity
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.cxk.nwuhelper.BaseConstant
 import com.cxk.nwuhelper.R
-import com.cxk.nwuhelper.ScoreActivity
-import com.cxk.nwuhelper.databinding.FragmentScoreBinding
+import com.cxk.nwuhelper.databinding.FragmentNwudoorBinding
 import com.cxk.nwuhelper.ui.base.BaseVMPFragment
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.AppPrefsUtils
-import com.cxk.nwuhelper.utils.SerializableMap
 import com.github.ybq.android.spinkit.sprite.Sprite
 import com.github.ybq.android.spinkit.style.DoubleBounce
 
 
-class ScoreFragment : BaseVMPFragment<FragmentScoreBinding, ScoreViewModel>() {
+class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel>() {
 
     override fun observerData() {
         binding.model = viewModel
@@ -28,18 +26,6 @@ class ScoreFragment : BaseVMPFragment<FragmentScoreBinding, ScoreViewModel>() {
 
         viewModel.judgeEnable()
 
-
-        viewModel.resultMap.observe(this, {
-            it.let {
-                val intent = Intent(context, ScoreActivity::class.java)
-                val myMap = SerializableMap()
-                myMap.map = it//将map数据添加到封装的myMap中
-                val bundle = Bundle()
-                bundle.putSerializable("map", myMap)
-                intent.putExtras(bundle)
-                requireActivity().startActivity(intent)
-            }
-        })
 
         viewModel.rmPasswordLiveData.observe(this, {
             when (it) {
@@ -146,14 +132,12 @@ class ScoreFragment : BaseVMPFragment<FragmentScoreBinding, ScoreViewModel>() {
 
     override fun initEvent() {
         binding.buttonScore.setOnClickListener {
-//            viewModel.resultMap.postValue(viewModel.scoreMap)
-            viewModel.resultMap.value = viewModel.scoreMap
-
+            Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.action_navigation_nwudoor_to_scroeFragment)
         }
     }
 
-    override fun getSubLayoutId() = R.layout.fragment_score
-    override fun getSubVMClass() = ScoreViewModel::class.java
+    override fun getSubLayoutId() = R.layout.fragment_nwudoor
+    override fun getSubVMClass() = NwudoorViewModel::class.java
 
     override fun initViewModel() {
         val IS_AUTO_LOGIN = AppPrefsUtils.getBoolean(BaseConstant.IS_AUTO_LOGIN_SCORE)
@@ -166,7 +150,7 @@ class ScoreFragment : BaseVMPFragment<FragmentScoreBinding, ScoreViewModel>() {
             NetSpBean(NAME_SCORE!!, PASSWORD_SCORE!!, IS_REMEMBER_PASSWORD, IS_AUTO_LOGIN)
 
         viewModel =
-            ViewModelProvider(this, ScoreViewModelFactory(ScoreSpBean)).get(getSubVMClass())
+            ViewModelProvider(this, NwudoorViewModelFactory(ScoreSpBean)).get(getSubVMClass())
     }
 
 

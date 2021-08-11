@@ -2,13 +2,12 @@ package com.cxk.nwuhelper
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.cxk.nwuhelper.databinding.ActivityMainBinding
 import com.cxk.nwuhelper.databinding.ActivityScoreBinding
+import com.cxk.nwuhelper.ui.nwudoor.score.adapter.ScoreAdapter
+import com.cxk.nwuhelper.ui.nwudoor.score.model.ScoreData
 import com.cxk.nwuhelper.utils.SerializableMap
-import java.util.ArrayList
+import java.util.*
 
 
 class ScoreActivity : AppCompatActivity() {
@@ -20,7 +19,6 @@ class ScoreActivity : AppCompatActivity() {
         binding = ActivityScoreBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-
 
         val bundle = intent.extras
         val myMap = bundle?.get("map") as SerializableMap
@@ -41,10 +39,7 @@ class ScoreActivity : AppCompatActivity() {
     }
 
     private fun setScoreItemRecycler(scoresList: List<ScoreData>) {
-
-
-        binding.productRecycler.adapter = ProductAdapter( this,scoresList)
+        binding.productRecycler.adapter = ScoreAdapter( this,scoresList)
         binding.productRecycler.setHasFixedSize(true)
-
     }
 }

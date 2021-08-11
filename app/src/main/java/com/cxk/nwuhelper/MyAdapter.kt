@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.cxk.nwuhelper.databinding.ScoreViewHolderBinding
+import com.cxk.nwuhelper.ui.nwudoor.score.model.ScoreData
 
 class MyAdapter(private val scoresList: List<ScoreData>) :
     RecyclerView.Adapter<MyAdapter.ScoreViewHolder>(){

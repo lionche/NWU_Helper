@@ -1,4 +1,4 @@
-package com.cxk.nwuhelper
+package com.cxk.nwuhelper.ui.nwudoor.score.adapter
 
 import android.content.Context
 import android.util.Log
@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.ScoreViewHolderBinding
+import com.cxk.nwuhelper.ui.nwudoor.score.model.ScoreData
 
 
-class ProductAdapter(var context: Context, private val productsList: List<ScoreData>) :
-    RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ScoreAdapter(var context: Context, private val productsList: List<ScoreData>) :
+    RecyclerView.Adapter<ScoreAdapter.ProductViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val itemBinding = DataBindingUtil.inflate<ScoreViewHolderBinding>(
