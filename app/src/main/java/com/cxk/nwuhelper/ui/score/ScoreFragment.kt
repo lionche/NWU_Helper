@@ -21,7 +21,10 @@ class ScoreFragment : BaseVMPFragment<FragmentDashboardBinding, ScoreViewModel>(
 
     override fun observerData() {
         binding.model = viewModel
+
         binding.lifecycleOwner = this
+
+        viewModel.judgeEnable()
 
 
         viewModel.resultMap.observe(this, {
@@ -71,7 +74,7 @@ class ScoreFragment : BaseVMPFragment<FragmentDashboardBinding, ScoreViewModel>(
                         if (viewModel.rmPasswordLiveData.value!!) {
                             AppPrefsUtils.putString(BaseConstant.NAME_SCORE, viewModel.name)
                             AppPrefsUtils.putString(
-                                BaseConstant.PASSWORD_WENET,
+                                BaseConstant.PASSWORD_SCORE,
                                 viewModel.password
                             )
                             Log.d(
@@ -79,8 +82,8 @@ class ScoreFragment : BaseVMPFragment<FragmentDashboardBinding, ScoreViewModel>(
                                 "loginNwuStudent: 保存用户为${viewModel.name},密码为${viewModel.password}"
                             )
                         } else {
-                            AppPrefsUtils.putString(BaseConstant.NAME_WENET, "")
-                            AppPrefsUtils.putString(BaseConstant.PASSWORD_WENET, "")
+                            AppPrefsUtils.putString(BaseConstant.NAME_SCORE, "")
+                            AppPrefsUtils.putString(BaseConstant.PASSWORD_SCORE, "")
                         }
 
                         binding.progressBar.visibility = View.GONE

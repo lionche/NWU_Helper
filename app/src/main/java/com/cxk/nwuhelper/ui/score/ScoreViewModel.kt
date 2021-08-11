@@ -30,7 +30,7 @@ class ScoreViewModel(netSpBean: NetSpBean) : ViewModel() {
     }
 
 
-    private fun judgeEnable() {
+    fun judgeEnable() {
         enable.value = name.isNotEmpty() && password.isNotEmpty()
         Log.d("password", "judgeEnable: ${enable.value}")
     }
