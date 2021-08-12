@@ -2,20 +2,21 @@ package com.cxk.nwuhelper.ui.nwudoor
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.cxk.nwuhelper.BaseConstant.NWU_LOGIN_URL
 import com.cxk.nwuhelper.BaseConstant.SCORE_URL
-import com.cxk.nwuhelper.ui.nwunet.Repository
+import com.cxk.nwuhelper.ui.nwudoor.score.model.ScoreData
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.encrypt
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
+import java.util.*
+import kotlin.collections.HashMap
+import kotlin.collections.set
 
 class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
-
 
     var name: String
     var password: String
@@ -72,7 +73,7 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         val document = Jsoup.parse(response.body())
         Log.d("website1", document.toString())
         val stringStringMap: Map<String, String> = extractInfo(document)
-        cookieLiveData.postValue(loginWebsite(cookies, stringStringMap))
+        loginWebsite(cookies, stringStringMap)
     }
 
 
@@ -81,7 +82,7 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
     private fun loginWebsite(
         cookies: Map<String, String>,
         stringStringMap: Map<String, String>
-    ): MutableMap<String, String>? {
+    ){
         val lt = stringStringMap["lt"]
         val execution = stringStringMap["execution"]
         val passwordAfterEncrypt = stringStringMap["password"]
@@ -98,6 +99,9 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
 
         val cookies1 = response.cookies()
 
+        //登陆所需要的cookie,放入livedata
+        cookieLiveData.postValue(cookies1)
+
         val document = Jsoup.parse(response.body()).toString()
         Log.d("website2", document)
 
@@ -106,13 +110,11 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
 
             buttonState.postValue("login_success")
 
-//            searchScroe()
+            searchScore(cookies1)
 
         } else {
             buttonState.postValue("wrong_password")
         }
-
-        return cookies1
 
 
     }
@@ -137,11 +139,11 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
     }
 
 
-    fun searchScore(cookies1:MutableMap<String, String>) {
+    fun searchScore(cookies:MutableMap<String, String>) {
         Log.d("website3", "访问website3")
 
         val connect =
-            Jsoup.connect(SCORE_URL).cookies(cookies1).followRedirects(true).timeout(10000)
+            Jsoup.connect(SCORE_URL).cookies(cookies).followRedirects(true).timeout(10000)
         connect.method(Connection.Method.GET)
         val response = connect.execute()
         val document = Jsoup.parse(response.body())
@@ -149,28 +151,37 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         val elementsScore = document.getElementsByTag("tbody").first().getElementsByTag("tr")
         Log.d("elementsScorevm", "searchScroe: ${elementsScore}")
 
-
 //        Log.d("elementsScore", "searchScroe: ${elementsScore.toString()}")
-//        giveScore(document)
+        giveScore(elementsScore)
+
+//        val scoreList = ArrayList<ScoreData>()
+
     }
 
 
 //    val scoreMap: MutableMap<String, String> = HashMap()
+    val scoreListLiveData = MutableLiveData<ArrayList<ScoreData>>()
 
-    private fun giveScore(document: Document) {
+    private fun giveScore(elementsScore: Elements) {
 //        Log.d("website3detail", elements.toString())
 
+        val scoreList = ArrayList<ScoreData>()
+
         //        System.out.println(elements.first().getElementsByTag("td").get(0).text());
-//        for (value in elementsScore) {
+        for (value in elementsScore) {
 //            Log.d("website3detail", value.toString()+"---")
-//
-//            val subject: String = value.getElementsByTag("td")[3].text()
-//            val score: String = value.getElementsByTag("td")[4].text()
-//            Log.d("website3detail", "$subject,$score")
-//
-////            scoreMap.put(subject, score)
+
+            val subject: String = value.getElementsByTag("td")[3].text()
+            val score: String = value.getElementsByTag("td")[4].text()
+            Log.d("website3detail", "$subject,$score")
+
+//            scoreMap.put(subject, score)
 //            scoreMap[subject] = score
-//        }
+
+            val scoreItem = ScoreData(subject,score)
+            scoreList.add(scoreItem)
+        }
+        scoreListLiveData.postValue(scoreList)
 
 //        resultMap.postValue(scoreMap)
 

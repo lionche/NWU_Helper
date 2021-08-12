@@ -24,7 +24,12 @@
         tools:layout="@layout/fragment_nwudoor" >
         <action
             android:id="@+id/action_navigation_nwudoor_to_scroeFragment"
-            app:destination="@id/scroeFragment" />
+            app:destination="@id/scroeFragment"
+            app:enterAnim="@anim/in_from_bottom"
+            app:exitAnim="@anim/out_to_top"
+            app:popEnterAnim="@anim/in_from_top"
+            app:popExitAnim="@anim/out_to_bottom"
+            />
     </fragment>
     <fragment
         android:id="@+id/scroeFragment"

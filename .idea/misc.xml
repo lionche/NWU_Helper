@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/mushroom_sad.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/drawable/ic_baseline_arrow_bottom_24.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/drawable/ic_baseline_arrow_forward_24.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.17502532928064843" />
         <entry key="app/src/main/res/layout/activity_score.xml" value="0.17502532928064843" />
         <entry key="app/src/main/res/layout/fragment_NWUDoor.xml" value="0.21875" />
@@ -10,8 +13,9 @@
         <entry key="app/src/main/res/layout/fragment_nwudoor.xml" value="0.21875" />
         <entry key="app/src/main/res/layout/fragment_nwunet.xml" value="0.17502532928064843" />
         <entry key="app/src/main/res/layout/fragment_score.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_scroe.xml" value="0.35989583333333336" />
+        <entry key="app/src/main/res/layout/fragment_scroe.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_wenet.xml" value="0.17502532928064843" />
+        <entry key="app/src/main/res/layout/score_view_holder.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.21875" />
       </map>
     </option>

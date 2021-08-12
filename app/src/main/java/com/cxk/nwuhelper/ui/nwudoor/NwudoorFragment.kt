@@ -11,6 +11,7 @@ import com.cxk.nwuhelper.BaseConstant
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentNwudoorBinding
 import com.cxk.nwuhelper.ui.base.BaseVMPFragment
+import com.cxk.nwuhelper.ui.nwudoor.score.model.ScoreData
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.AppPrefsUtils
 import com.github.ybq.android.spinkit.sprite.Sprite
@@ -19,13 +20,16 @@ import com.github.ybq.android.spinkit.style.DoubleBounce
 
 class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel>() {
 
+    companion object{
+        var scoreList = ArrayList<ScoreData>()
+    }
+
     override fun observerData() {
         binding.model = viewModel
 
         binding.lifecycleOwner = this
 
         viewModel.judgeEnable()
-
 
         viewModel.rmPasswordLiveData.observe(this, {
             when (it) {
@@ -73,8 +77,6 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
                         binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
                     }
                     "login_success" -> {
-
-
                         binding.mushroom.setImageResource(R.drawable.mushroom)
 
                         AppPrefsUtils.putBoolean(
@@ -110,9 +112,8 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
                         }, 800)
 
 
-
+                        binding.btnLogin.visibility = View.GONE
                         binding.progressBar.visibility = View.GONE
-                        binding.btnSuccess.visibility = View.VISIBLE
                         binding.btnSuccess.apply {
                             visibility = View.VISIBLE
                             isChecked = true
@@ -135,10 +136,12 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
         binding.progressBar.setIndeterminateDrawable(doubleBounce)
     }
 
+
     override fun initEvent() {
 
         binding.buttonScore.setOnClickListener {
-            Log.d("elementsScore", "searchScroe6: ${viewModel.cookieLiveData.value}")
+            scoreList = viewModel.scoreListLiveData.value!!
+            Log.d("elementsScore", "searchScroe6: ${scoreList[0].score}")
 
             Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.action_navigation_nwudoor_to_scroeFragment)
         }

@@ -34,15 +34,13 @@
             android:id="@+id/score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-black"
+            android:layout_marginEnd="15dp"
             android:text="@{ScoreData.score}"
             android:textAlignment="viewStart"
+            android:textColor="@color/mushroom"
             android:textSize="15sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="15dp"
-            android:textColor="@color/forest_class_btn_bg"
             tools:text="100" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
