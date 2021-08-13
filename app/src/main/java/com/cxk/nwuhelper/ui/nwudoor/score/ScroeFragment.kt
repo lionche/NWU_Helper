@@ -1,5 +1,8 @@
 package com.cxk.nwuhelper.ui.nwudoor.score
 
+import android.app.Instrumentation
+import android.util.Log
+import android.view.KeyEvent
 import androidx.lifecycle.ViewModelProvider
 import com.cxk.nwuhelper.BaseConstant
 import com.cxk.nwuhelper.R
@@ -17,38 +20,29 @@ class ScroeFragment : BaseVMPFragment<FragmentScroeBinding, NwudoorViewModel>() 
 
 
     override fun observerData() {
-
-
-//        Log.d(
-//            "elementsScore", "searchScroe7: ${
-//                NwudoorFragment.scoreList[0].score
-//            }"
-//        )
-            setScoreItemRecycler(NwudoorFragment.scoreList)
+        setScoreItemRecycler(NwudoorFragment.scoreList)
+//        viewModel.scoreListLiveData.value = NwudoorFragment.scoreList
+        Log.d(
+            "scoreListLiveData",
+            "导航到成绩2,${viewModel.scoreListLiveData.value?.get(0)?.score}"
+        )
 
     }
 
-
-//    override fun startLoadData() {
-//        Log.d("elementsScorevm", "searchScroe3: ${viewModel.cookieLiveData.value}")
-//
-//        val elementsScore = viewModel.cookieLiveData.value?.let { viewModel.searchScore(it) }
-//        Log.d("elementsScorefragmet", "searchScroe: ${elementsScore}")
-//
-//        for (value in elementsScore!!) {
-//            Log.d("website3detail", value.toString()+"---")
-//
-//            val subject: String = value.getElementsByTag("td")[3].text()
-//            val score: String = value.getElementsByTag("td")[4].text()
-//            Log.d("website3detail", "$subject,$score")
-//
-//            val scoreItem = ScoreData(subject,score)
-//            scoreList.add(scoreItem)
-//
-//        }
-//        setScoreItemRecycler(scoreList)
-//    }
-
+    override fun initEvent() {
+        binding.btnBackToDoor.setOnClickListener {
+            object : Thread() {
+                override fun run() {
+                    try {
+                        val inst = Instrumentation()
+                        inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }.start()
+        }
+    }
 
     private fun setScoreItemRecycler(scoresList: List<ScoreData>) {
         binding.productRecycler.adapter = ScoreAdapter(requireContext(), scoresList)

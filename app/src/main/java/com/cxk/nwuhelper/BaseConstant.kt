@@ -9,6 +9,9 @@ object BaseConstant {
     //登陆统一门户后,查询成绩
     const val SCORE_URL = "http://yjsxt.nwu.edu.cn/py/page/student/cjgrcx.htm"
 
+    //登陆统一门户后,晨午检
+    const val REPORT_URL = "https://app.nwu.edu.cn/site/ncov/dailyup"
+
     //WENET
     const val WENET_URL = "http://10.16.0.12:8081/portal/api/v2/"
     const val IS_AUTO_LOGIN_WENET = "IS_AUTO_LOGIN_WENET"

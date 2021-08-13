@@ -12,8 +12,9 @@
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.17502532928064843" />
         <entry key="app/src/main/res/layout/fragment_nwudoor.xml" value="0.21875" />
         <entry key="app/src/main/res/layout/fragment_nwunet.xml" value="0.17502532928064843" />
+        <entry key="app/src/main/res/layout/fragment_report.xml" value="0.21875" />
         <entry key="app/src/main/res/layout/fragment_score.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_scroe.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_scroe.xml" value="0.22592592592592592" />
         <entry key="app/src/main/res/layout/fragment_wenet.xml" value="0.17502532928064843" />
         <entry key="app/src/main/res/layout/score_view_holder.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.21875" />

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.cxk.nwuhelper.BaseConstant.NWU_LOGIN_URL
+import com.cxk.nwuhelper.BaseConstant.REPORT_URL
 import com.cxk.nwuhelper.BaseConstant.SCORE_URL
 import com.cxk.nwuhelper.ui.nwudoor.score.model.ScoreData
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
@@ -111,6 +112,7 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
             buttonState.postValue("login_success")
 
             searchScore(cookies1)
+            report(cookies1)
 
         } else {
             buttonState.postValue("wrong_password")
@@ -138,7 +140,7 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         return map
     }
 
-
+    //查询成绩
     fun searchScore(cookies:MutableMap<String, String>) {
         Log.d("website3", "访问website3")
 
@@ -150,11 +152,18 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         Log.d("website3", document.toString())
         val elementsScore = document.getElementsByTag("tbody").first().getElementsByTag("tr")
         Log.d("elementsScorevm", "searchScroe: ${elementsScore}")
-
-//        Log.d("elementsScore", "searchScroe: ${elementsScore.toString()}")
         giveScore(elementsScore)
+    }
 
-//        val scoreList = ArrayList<ScoreData>()
+    //晨午检
+    fun report(cookies:MutableMap<String, String>){
+        Log.d("chenwujian", "访问晨午检")
+        val connect =
+            Jsoup.connect(REPORT_URL).cookies(cookies).followRedirects(true).timeout(10000)
+        connect.method(Connection.Method.GET)
+        val response = connect.execute()
+        val document = Jsoup.parse(response.body())
+        Log.d("chenwujian", document.toString())
 
     }
 
@@ -189,6 +198,8 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
     }
 
     val buttonState = MutableLiveData<String>()
+
+    val scoreFragmentState = MutableLiveData<String>()
 
 
 }

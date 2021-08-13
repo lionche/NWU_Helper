@@ -20,11 +20,17 @@ import com.github.ybq.android.spinkit.style.DoubleBounce
 
 class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel>() {
 
-    companion object{
+    companion object {
         var scoreList = ArrayList<ScoreData>()
     }
 
     override fun observerData() {
+
+        Log.d(
+            "chengji",
+            "导航到成绩0${viewModel.buttonState.value}"
+        )
+
         binding.model = viewModel
 
         binding.lifecycleOwner = this
@@ -62,12 +68,23 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
                 }
             })
 
+
+
+
+        viewModel.scoreFragmentState.observe(this, {
+            when (it) {
+                "open" -> {
+
+                }
+            }
+        })
+
         viewModel.buttonState.observe(this,
             {
                 when (it) {
                     "start_to_login" -> {
-                        binding.btnLogin.visibility = View.GONE
-                        binding.progressBar.visibility = View.VISIBLE
+                        binding.btnLogin.visibility = View.VISIBLE
+                        binding.progressBar.visibility = View.GONE
                         binding.btnSuccess.visibility = View.GONE
                     }
                     "wrong_password" -> {
@@ -105,10 +122,13 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
                             AppPrefsUtils.putString(BaseConstant.NAME_SCORE, "")
                             AppPrefsUtils.putString(BaseConstant.PASSWORD_SCORE, "")
                         }
-
+//
                         Handler(Looper.getMainLooper()).postDelayed({
-                            binding.buttonScore.visibility = View.VISIBLE
-                            binding.buttonReport.visibility = View.VISIBLE
+                            scoreList = viewModel.scoreListLiveData.value!!
+
+                            Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
+                                .navigate(R.id.action_navigation_nwudoor_to_scroeFragment)
+
                         }, 800)
 
 
@@ -119,8 +139,6 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
                             isChecked = true
                             isClickable = false
                         }
-
-
                     }
                 }
             })
@@ -140,10 +158,14 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
     override fun initEvent() {
 
         binding.buttonScore.setOnClickListener {
-            scoreList = viewModel.scoreListLiveData.value!!
+//            scoreList = viewModel.scoreListLiveData.value!!
             Log.d("elementsScore", "searchScroe6: ${scoreList[0].score}")
-
-            Navigation.findNavController(context as Activity, R.id.nav_host_fragment).navigate(R.id.action_navigation_nwudoor_to_scroeFragment)
+            Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
+                .navigate(R.id.action_navigation_nwudoor_to_scroeFragment)
+        }
+        binding.buttonReport.setOnClickListener {
+            Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
+                .navigate(R.id.action_navigation_nwudoor_to_reportFragment)
         }
     }
 
