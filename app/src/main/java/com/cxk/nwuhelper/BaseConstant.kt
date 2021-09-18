@@ -13,7 +13,7 @@ object BaseConstant {
     const val REPORT_URL = "https://app.nwu.edu.cn/site/ncov/dailyup"
 
     //WENET
-    const val WENET_URL = "http://10.16.0.12:8081/portal/api/v2/"
+    const val WENET_URL = "http://10.16.0.21/portal/api/v2/"
     const val IS_AUTO_LOGIN_WENET = "IS_AUTO_LOGIN_WENET"
     const val IS_REMEMBER_PASSWORD_WENET = "IS_REMEMBER_PASSWORD_WENET"
     const val NAME_WENET = "NAME_WENET"
