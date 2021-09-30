@@ -124,6 +124,7 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
                         }
 //
                         Handler(Looper.getMainLooper()).postDelayed({
+//                            把viewmodel的东西取出放入list
                             scoreList = viewModel.scoreListLiveData.value!!
 
                             Navigation.findNavController(context as Activity, R.id.nav_host_fragment)

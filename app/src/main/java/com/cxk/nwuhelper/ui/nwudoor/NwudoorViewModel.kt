@@ -4,18 +4,22 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.cxk.nwuhelper.BaseConstant.NWU_LOGIN_URL
-import com.cxk.nwuhelper.BaseConstant.REPORT_URL
 import com.cxk.nwuhelper.BaseConstant.SCORE_URL
+import com.cxk.nwuhelper.MyApplication
 import com.cxk.nwuhelper.ui.nwudoor.score.model.ScoreData
+import com.cxk.nwuhelper.ui.nwudoor.score.util.unzip.unzipPdf
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.encrypt
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
+import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.collections.set
+
 
 class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
 
@@ -52,7 +56,7 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
     val cookieLiveData = MutableLiveData<MutableMap<String, String>>()
 
 
-    fun visitWebsiteNewThread(){
+    fun visitWebsiteNewThread() {
 
         object : Thread() {
             override fun run() {
@@ -63,7 +67,7 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
 
     }
 
-    fun visitWebsite(){
+    fun visitWebsite() {
         Log.d("chengji", "开始查询")
 
         val connect: Connection = Jsoup.connect(NWU_LOGIN_URL)
@@ -78,12 +82,11 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
     }
 
 
-
     //登陆需要的cookie
     private fun loginWebsite(
         cookies: Map<String, String>,
         stringStringMap: Map<String, String>
-    ){
+    ) {
         val lt = stringStringMap["lt"]
         val execution = stringStringMap["execution"]
         val passwordAfterEncrypt = stringStringMap["password"]
@@ -112,7 +115,26 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
             buttonState.postValue("login_success")
 
             searchScore(cookies1)
-            report(cookies1)
+
+            //下载pdf
+            downloadScorePdf(cookies1)
+
+            //解压pdf
+            val pdfName = unzipPdf(File(MyApplication.context.filesDir, "temp.zip"),MyApplication.context.filesDir.absolutePath)
+
+
+//            report(cookies1)
+
+//            val mRunnable = Runnable {
+//                run {
+//                    unzip.upZipFile(
+//                        File(MyApplication.context.filesDir, "temp.zip"),
+//                        MyApplication.context.filesDir.absolutePath
+//                    )
+//                }
+//            }
+//
+//            Thread(mRunnable).start()
 
         } else {
             buttonState.postValue("wrong_password")
@@ -120,6 +142,57 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
 
 
     }
+
+
+    private fun downloadScorePdf(cookies: Map<String, String>) {
+//        val connect =
+//            Jsoup.connect("http://yjsxt.nwu.edu.cn/py/page/student/cjgrcx.htm?pageAction=download&xh=202032908").cookies(cookies).followRedirects(true).timeout(10000)
+//        connect.method(Connection.Method.GET)
+//        val response = connect.execute()
+//        val document = Jsoup.parse(response.body())
+//        Log.d("downloadpdf", document.toString())
+
+        //下载网址的url地址
+        val response =
+            Jsoup.connect("http://yjsxt.nwu.edu.cn/py/page/student/cjgrcx.htm?pageAction=download&xh=202032908")
+                .cookies(cookies)
+                .followRedirects(true)
+                .timeout(10000)
+                .method(Connection.Method.GET)
+                .ignoreContentType(true)
+                .execute()
+
+        val out = FileOutputStream(File(MyApplication.context.filesDir, "temp.zip"))
+        out.write(response.bodyAsBytes())
+        out.close()
+
+
+
+//        val document = Jsoup.parse(response.body())
+//
+//        Log.d("downloadpdf", document.toString())
+
+
+//        val a = doc.getElementsByTag("a")
+//        val map: MutableMap<String, String> = HashMap()
+//        for (element in a) {
+//            if (element.html().contains("Directory")) {
+//                continue
+//            }
+//            val document = Jsoup.connect("要下载的地址" + element.html()).get()
+//            val fileSrcs = document.getElementsByTag("a")
+//            for (fileSrc in fileSrcs) {
+//                map[fileSrc.html()] = "域名地址" + fileSrc.attr("href")
+//                System.err.println("下载的文件名称=========================" + fileSrc.html())
+//            }
+//        }
+//        for ((key, value) in map) {
+//            download(value, "", key)
+//        }
+
+
+    }
+
 
 
     private fun extractInfo(document: Document): Map<String, String> {
@@ -141,7 +214,7 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
     }
 
     //查询成绩
-    fun searchScore(cookies:MutableMap<String, String>) {
+    fun searchScore(cookies: MutableMap<String, String>) {
         Log.d("website3", "访问website3")
 
         val connect =
@@ -156,19 +229,19 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
     }
 
     //晨午检
-    fun report(cookies:MutableMap<String, String>){
-        Log.d("chenwujian", "访问晨午检")
-        val connect =
-            Jsoup.connect(REPORT_URL).cookies(cookies).followRedirects(true).timeout(10000)
-        connect.method(Connection.Method.GET)
-        val response = connect.execute()
-        val document = Jsoup.parse(response.body())
-        Log.d("chenwujian", document.toString())
+//    fun report(cookies:MutableMap<String, String>){
+//        Log.d("chenwujian", "访问晨午检")
+//        val connect =
+//            Jsoup.connect(REPORT_URL).cookies(cookies).followRedirects(true).timeout(10000)
+//        connect.method(Connection.Method.GET)
+//        val response = connect.execute()
+//        val document = Jsoup.parse(response.body())
+//        Log.d("chenwujian", document.toString())
+//
+//    }
 
-    }
 
-
-//    val scoreMap: MutableMap<String, String> = HashMap()
+    //    val scoreMap: MutableMap<String, String> = HashMap()
     val scoreListLiveData = MutableLiveData<ArrayList<ScoreData>>()
 
     private fun giveScore(elementsScore: Elements) {
@@ -187,9 +260,10 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
 //            scoreMap.put(subject, score)
 //            scoreMap[subject] = score
 
-            val scoreItem = ScoreData(subject,score)
+            val scoreItem = ScoreData(subject, score)
             scoreList.add(scoreItem)
         }
+        //将查询到的成绩存入scoreListLiveData
         scoreListLiveData.postValue(scoreList)
 
 //        resultMap.postValue(scoreMap)
