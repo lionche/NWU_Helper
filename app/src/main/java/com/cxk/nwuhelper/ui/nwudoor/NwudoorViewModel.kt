@@ -7,6 +7,7 @@ import com.cxk.nwuhelper.BaseConstant.NWU_LOGIN_URL
 import com.cxk.nwuhelper.BaseConstant.SCORE_URL
 import com.cxk.nwuhelper.MyApplication
 import com.cxk.nwuhelper.ui.nwudoor.score.model.ScoreData
+import com.cxk.nwuhelper.ui.nwudoor.score.util.ExtractPdf
 import com.cxk.nwuhelper.ui.nwudoor.score.util.unzip.unzipPdf
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.encrypt
@@ -119,22 +120,14 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
             //下载pdf
             downloadScorePdf(cookies1)
 
-            //解压pdf
-            val pdfName = unzipPdf(File(MyApplication.context.filesDir, "temp.zip"),MyApplication.context.filesDir.absolutePath)
+            unzipPdf(
+                File(MyApplication.context.filesDir, "temp.zip"),
+                MyApplication.context.filesDir.absolutePath
+            )
 
+            val extractPdf = ExtractPdf()
+            extractPdf.extractPdf()
 
-//            report(cookies1)
-
-//            val mRunnable = Runnable {
-//                run {
-//                    unzip.upZipFile(
-//                        File(MyApplication.context.filesDir, "temp.zip"),
-//                        MyApplication.context.filesDir.absolutePath
-//                    )
-//                }
-//            }
-//
-//            Thread(mRunnable).start()
 
         } else {
             buttonState.postValue("wrong_password")
@@ -166,33 +159,7 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         out.write(response.bodyAsBytes())
         out.close()
 
-
-
-//        val document = Jsoup.parse(response.body())
-//
-//        Log.d("downloadpdf", document.toString())
-
-
-//        val a = doc.getElementsByTag("a")
-//        val map: MutableMap<String, String> = HashMap()
-//        for (element in a) {
-//            if (element.html().contains("Directory")) {
-//                continue
-//            }
-//            val document = Jsoup.connect("要下载的地址" + element.html()).get()
-//            val fileSrcs = document.getElementsByTag("a")
-//            for (fileSrc in fileSrcs) {
-//                map[fileSrc.html()] = "域名地址" + fileSrc.attr("href")
-//                System.err.println("下载的文件名称=========================" + fileSrc.html())
-//            }
-//        }
-//        for ((key, value) in map) {
-//            download(value, "", key)
-//        }
-
-
     }
-
 
 
     private fun extractInfo(document: Document): Map<String, String> {

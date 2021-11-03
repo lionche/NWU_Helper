@@ -2,10 +2,10 @@ package com.cxk.nwuhelper.ui.nwudoor.score.util;
 
 import android.util.Log;
 
-import com.tom_roush.pdfbox.io.IOUtils;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.apache.commons.compress.utils.IOUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -29,11 +29,12 @@ public class unzip {
                 } else {
                     OutputStream os = null;
                     try {
-                        os = new BufferedOutputStream(new FileOutputStream(new File(descDir, entry.getName())));
-                        Log.d("pdffile",entry.getName());
+//                        os = new BufferedOutputStream(new FileOutputStream(new File(descDir, entry.getName())));
+                        os = new BufferedOutputStream(new FileOutputStream(new File(descDir, "temp.pdf")));
+//                        Log.d("pdffile","temp.pdf");
 
                         //输出文件路径信息
-//                        LOG.info("解压文件的当前路径为:{}", descDir + entry.getName());
+                        Log.d("解压文件的当前路径为:", descDir + "/temp.pdf");
                         IOUtils.copy(inputStream, os);
                     } finally {
                         IOUtils.closeQuietly(os);
@@ -44,7 +45,7 @@ public class unzip {
         } catch (Exception e) {
 //            LOG.error("[unzip] 解压zip文件出错", e);
         }
-        return entry.getName();
+        return "temp.pdf";
     }
 
     private static ZipArchiveInputStream getZipFile(File zipFile) throws Exception {
