@@ -85,8 +85,8 @@ dependencies {
     implementation 'com.github.ChengangFeng:TickView:v1.0.2'
 
     //解析pdf
-    implementation'technology.tabula:tabula:1.0.5'
-//    implementation 'com.tom-roush:pdfbox-android:2.0.4.0'
+    implementation 'com.github.GitHubZJY:AndroidPdfHelper:v1.0.0'
+
 
     //解压
     implementation"org.apache.commons:commons-compress:1.21"

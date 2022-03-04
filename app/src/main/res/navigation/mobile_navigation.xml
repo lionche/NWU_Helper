@@ -31,24 +31,32 @@
             app:popExitAnim="@anim/out_to_bottom"
             />
         <action
-            android:id="@+id/action_navigation_nwudoor_to_reportFragment"
-            app:destination="@id/reportFragment"
+            android:id="@+id/action_navigation_nwudoor_to_showPdfFragment"
+            app:destination="@id/showPdfFragment"
             app:enterAnim="@anim/in_from_bottom"
             app:exitAnim="@anim/out_to_top"
             app:popEnterAnim="@anim/in_from_top"
-            app:popExitAnim="@anim/out_to_bottom"/>
+            app:popExitAnim="@anim/out_to_bottom" />
+
     </fragment>
     <fragment
         android:id="@+id/scroeFragment"
         android:name="com.cxk.nwuhelper.ui.nwudoor.score.ScroeFragment"
         android:label="ScroeFragment"
         tools:layout="@layout/fragment_scroe">
+        <action
+            android:id="@+id/action_scroeFragment_to_showPdfFragment"
+            app:destination="@id/showPdfFragment"
+            app:enterAnim="@anim/in_from_bottom"
+            app:exitAnim="@anim/out_to_top"
+            app:popEnterAnim="@anim/in_from_top"
+            app:popExitAnim="@anim/out_to_bottom"/>
     </fragment>
 
     <fragment
-        android:id="@+id/reportFragment"
-        android:name="com.cxk.nwuhelper.ui.nwudoor.report.ReportFragment"
-        android:label="ReportFragment"
-        tools:layout="@layout/fragment_report"/>
+        android:id="@+id/showPdfFragment"
+        android:name="com.cxk.nwuhelper.ui.nwudoor.score.showPdfFragment"
+        android:label="showPdfFragment"
+        tools:layout="@layout/fragment_showpdf"/>
 
 </navigation>

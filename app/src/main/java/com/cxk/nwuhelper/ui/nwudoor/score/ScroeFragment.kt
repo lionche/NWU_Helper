@@ -1,8 +1,11 @@
 package com.cxk.nwuhelper.ui.nwudoor.score
 
+import android.app.Activity
 import android.app.Instrumentation
 import android.view.KeyEvent
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.cxk.nwuhelper.BaseConstant
 import com.cxk.nwuhelper.R
 import com.cxk.nwuhelper.databinding.FragmentScroeBinding
@@ -12,7 +15,6 @@ import com.cxk.nwuhelper.ui.nwudoor.NwudoorViewModel
 import com.cxk.nwuhelper.ui.nwudoor.NwudoorViewModelFactory
 import com.cxk.nwuhelper.ui.nwudoor.score.adapter.ScoreAdapter
 import com.cxk.nwuhelper.ui.nwudoor.score.model.ScoreData
-import com.cxk.nwuhelper.ui.nwudoor.score.util.ExtractPdf
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.AppPrefsUtils
 
@@ -22,6 +24,8 @@ class ScroeFragment : BaseVMPFragment<FragmentScroeBinding, NwudoorViewModel>() 
 
 
     override fun observerData() {
+
+
 //        val extractPdf = ExtractPdf()
 //        extractPdf.extractPdf()
 
@@ -32,17 +36,22 @@ class ScroeFragment : BaseVMPFragment<FragmentScroeBinding, NwudoorViewModel>() 
     }
 
     override fun initEvent() {
+//        binding.btnBackToDoor.setOnClickListener {
+//            object : Thread() {
+//                override fun run() {
+//                    try {
+//                        val inst = Instrumentation()
+//                        inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK)
+//                    } catch (e: Exception) {
+//                        e.printStackTrace()
+//                    }
+//                }
+//            }.start()
+//        }
         binding.btnBackToDoor.setOnClickListener {
-            object : Thread() {
-                override fun run() {
-                    try {
-                        val inst = Instrumentation()
-                        inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            }.start()
+            Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
+                .navigate(R.id.action_scroeFragment_to_showPdfFragment)
+
         }
     }
 

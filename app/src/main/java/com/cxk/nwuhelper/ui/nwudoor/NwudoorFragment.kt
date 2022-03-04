@@ -52,7 +52,8 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
                 }
             }
         }
-        viewModel.autoLoginLiveData.observe(this
+        viewModel.autoLoginLiveData.observe(
+            this
         ) {
             when (it) {
                 true -> {
@@ -79,12 +80,13 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
             }
         }
 
-        viewModel.buttonState.observe(this
+        viewModel.buttonState.observe(
+            this
         ) {
             when (it) {
                 "start_to_login" -> {
-                    binding.btnLogin.visibility = View.VISIBLE
-                    binding.progressBar.visibility = View.GONE
+                    binding.btnLogin.visibility = View.GONE
+                    binding.progressBar.visibility = View.VISIBLE
                     binding.btnSuccess.visibility = View.GONE
                 }
                 "wrong_password" -> {
@@ -123,14 +125,23 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
                         AppPrefsUtils.putString(BaseConstant.PASSWORD_SCORE, "")
                     }
 //
+
                     Handler(Looper.getMainLooper()).postDelayed({
-//                            把viewmodel的东西取出放入list
-                        scoreList = viewModel.scoreListLiveData.value!!
+                        //                            把viewmodel的东西取出放入list
+                        try {
+                            scoreList = viewModel.scoreListLiveData.value!!
+                        } catch (e: Exception) {
+                        }
+
+//                        Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
+//                            .navigate(R.id.action_navigation_nwudoor_to_scroeFragment)
 
                         Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
-                            .navigate(R.id.action_navigation_nwudoor_to_scroeFragment)
+                            .navigate(R.id.action_navigation_nwudoor_to_showPdfFragment)
+
 
                     }, 800)
+
 
 
                     binding.btnLogin.visibility = View.GONE
@@ -158,16 +169,13 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
 
     override fun initEvent() {
 
-        binding.buttonScore.setOnClickListener {
-//            scoreList = viewModel.scoreListLiveData.value!!
-            Log.d("elementsScore", "searchScroe6: ${scoreList[0].score}")
-            Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
-                .navigate(R.id.action_navigation_nwudoor_to_scroeFragment)
-        }
-        binding.buttonReport.setOnClickListener {
-            Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
-                .navigate(R.id.action_navigation_nwudoor_to_reportFragment)
-        }
+//        binding.buttonScore.setOnClickListener {
+////            scoreList = viewModel.scoreListLiveData.value!!
+//            Log.d("elementsScore", "searchScroe6: ${scoreList[0].score}")
+//            Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
+//                .navigate(R.id.action_navigation_nwudoor_to_scroeFragment)
+//        }
+
     }
 
     override fun getSubLayoutId() = R.layout.fragment_nwudoor

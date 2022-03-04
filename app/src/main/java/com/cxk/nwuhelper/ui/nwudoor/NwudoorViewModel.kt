@@ -7,7 +7,6 @@ import com.cxk.nwuhelper.BaseConstant.NWU_LOGIN_URL
 import com.cxk.nwuhelper.BaseConstant.SCORE_URL
 import com.cxk.nwuhelper.MyApplication
 import com.cxk.nwuhelper.ui.nwudoor.score.model.ScoreData
-import com.cxk.nwuhelper.ui.nwudoor.score.util.ExtractPdf
 import com.cxk.nwuhelper.ui.nwudoor.score.util.unzip.unzipPdf
 import com.cxk.nwuhelper.ui.wenet.model.NetSpBean
 import com.cxk.nwuhelper.utils.encrypt
@@ -54,8 +53,6 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         judgeEnable()
     }
 
-    val cookieLiveData = MutableLiveData<MutableMap<String, String>>()
-
 
     fun visitWebsiteNewThread() {
 
@@ -67,6 +64,8 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         buttonState.postValue("start_to_login")
 
     }
+    //定义cookies
+
 
     fun visitWebsite() {
         Log.d("chengji", "开始查询")
@@ -75,6 +74,7 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
 //        connect.header(USER_AGENT, USER_AGENT_VALUE) // 配置模拟浏览器
         val response: Connection.Response = connect.execute()
         val cookies: Map<String, String> = response.cookies()
+//        cookieLiveData.postValue(cookies)
         //        System.out.println("cookies:" + cookies);
         val document = Jsoup.parse(response.body())
         Log.d("website1", document.toString())
@@ -82,6 +82,10 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         loginWebsite(cookies, stringStringMap)
     }
 
+
+    companion object { // 注解---1
+        var cookies1: Map<String, String>? = null
+    }
 
     //登陆需要的cookie
     private fun loginWebsite(
@@ -102,10 +106,12 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         connect.method(Connection.Method.POST)
         val response = connect.execute()
 
-        val cookies1 = response.cookies()
+        cookies1 = response.cookies()
 
         //登陆所需要的cookie,放入livedata
-        cookieLiveData.postValue(cookies1)
+
+
+
 
         val document = Jsoup.parse(response.body()).toString()
         Log.d("website2", document)
@@ -113,20 +119,21 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
         //登陆成功
         if ("This document you requested has moved temporarily" in document) {
 
-            buttonState.postValue("login_success")
+//            buttonState.postValue("login_success")
 
-            searchScore(cookies1)
+//            searchScore(cookies1)
 
             //下载pdf
-            downloadScorePdf(cookies1)
-
+            downloadScorePdf(name,cookies1!!)
+            //解压pdf
             unzipPdf(
                 File(MyApplication.context.filesDir, "temp.zip"),
                 MyApplication.context.filesDir.absolutePath
             )
+            File(MyApplication.context.filesDir, "temp.zip").delete()
+            Log.d("downoadpdf", "下载${name}成功")
 
-            val extractPdf = ExtractPdf()
-            extractPdf.extractPdf()
+            buttonState.postValue("login_success")
 
 
         } else {
@@ -137,17 +144,39 @@ class NwudoorViewModel(netSpBean: NetSpBean) : ViewModel() {
     }
 
 
-    private fun downloadScorePdf(cookies: Map<String, String>) {
-//        val connect =
-//            Jsoup.connect("http://yjsxt.nwu.edu.cn/py/page/student/cjgrcx.htm?pageAction=download&xh=202032908").cookies(cookies).followRedirects(true).timeout(10000)
-//        connect.method(Connection.Method.GET)
-//        val response = connect.execute()
-//        val document = Jsoup.parse(response.body())
-//        Log.d("downloadpdf", document.toString())
+    fun Download2showPdf(name: String,cookies: Map<String, String>) {
+
+        object : Thread() {
+            override fun run() {
+                downloadScorePdf(name,cookies)
+                //解压pdf
+                unzipPdf(
+                    File(MyApplication.context.filesDir, "temp.zip"),
+                    MyApplication.context.filesDir.absolutePath
+                )
+                File(MyApplication.context.filesDir, "temp.zip").delete()
+                Log.d("downoadpdf", "下载${name}成功")
+                buttonState.postValue("load_pdf")
+
+
+
+            }
+        }.start()
+
+
+    }
+
+
+    private fun downloadScorePdf(name: String,cookies: Map<String, String>) {
+        Log.d("downoadpdf", "正在下载${name}")
+
+        var url =
+            "http://yjsxt.nwu.edu.cn/py/page/student/cjgrcx.htm?pageAction=download&xh=MYNUMBER"
+        url = url.replace("MYNUMBER", name)
 
         //下载网址的url地址
         val response =
-            Jsoup.connect("http://yjsxt.nwu.edu.cn/py/page/student/cjgrcx.htm?pageAction=download&xh=202032908")
+            Jsoup.connect(url)
                 .cookies(cookies)
                 .followRedirects(true)
                 .timeout(10000)

@@ -3,7 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/che/Documents/GitHub/NWU_Helper/app/src/main/res/layout/activity_main.xml" value="0.1453804347826087" />
         <entry key="..\:/Users/che/Documents/GitHub/NWU_Helper/app/src/main/res/layout/fragment_nwudoor.xml" value="0.13229166666666667" />
+        <entry key="..\:/Users/che/Documents/GitHub/NWU_Helper/app/src/main/res/layout/fragment_report.xml" value="0.21666666666666667" />
+        <entry key="..\:/Users/che/Documents/GitHub/NWU_Helper/app/src/main/res/layout/fragment_scroe.xml" value="0.14444444444444443" />
+        <entry key="..\:/Users/che/Documents/GitHub/NWU_Helper/app/src/main/res/layout/fragment_showpdf.xml" value="0.125" />
+        <entry key="..\:/Users/che/Documents/GitHub/NWU_Helper/app/src/main/res/layout/fragment_wenet.xml" value="0.14266304347826086" />
         <entry key="app/src/main/res/drawable-v24/mushroom_sad.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_bottom_24.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_forward_24.xml" value="0.37604166666666666" />

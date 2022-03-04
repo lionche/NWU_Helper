@@ -18,7 +18,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             >
 
             <TextView
@@ -47,27 +48,32 @@
                 app:layout_constraintTop_toBottomOf="@+id/title_score"
                 tools:listitem="@layout/score_view_holder" />
 
-            <com.google.android.material.button.MaterialButton
-                android:visibility="gone"
-                android:id="@+id/btn_back_to_door"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                app:cornerRadius="100dp"
-                app:icon="@drawable/ic_baseline_arrow_bottom_24"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:iconSize="35dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/product_recycler"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="30dp"
-                />
+
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_back_to_door"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="30dp"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    android:visibility="visible"
+                    app:cornerRadius="100dp"
+                    app:icon="@drawable/ic_baseline_arrow_bottom_24"
+                    app:iconGravity="textStart"
+                    app:iconPadding="0dp"
+                    app:iconSize="25dp"
+                    app:layout_constraintTop_toBottomOf="@+id/product_recycler"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.85"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
