@@ -37,13 +37,13 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
 
         viewModel.judgeEnable()
 
-        viewModel.rmPasswordLiveData.observe(this, {
+        viewModel.rmPasswordLiveData.observe(this) {
             when (it) {
                 false -> viewModel.autoLoginLiveData.value = false
             }
-        })
+        }
 
-        viewModel.enable.observe(this, {
+        viewModel.enable.observe(this) {
             when (it) {
                 true -> {
                     if (viewModel.autoLoginLiveData.value == true) {
@@ -51,98 +51,98 @@ class NwudoorFragment : BaseVMPFragment<FragmentNwudoorBinding, NwudoorViewModel
                     }
                 }
             }
-        })
-        viewModel.autoLoginLiveData.observe(this,
-            {
-                when (it) {
-                    true -> {
-                        viewModel.rmPasswordLiveData.value = true
-                    }
-                    false -> {
-                        AppPrefsUtils.putBoolean(
-                            BaseConstant.IS_AUTO_LOGIN_SCORE,
-                            viewModel.autoLoginLiveData.value!!
-                        )
-                        Log.d("gouxuan", "取消自动登陆")
-                    }
+        }
+        viewModel.autoLoginLiveData.observe(this
+        ) {
+            when (it) {
+                true -> {
+                    viewModel.rmPasswordLiveData.value = true
                 }
-            })
+                false -> {
+                    AppPrefsUtils.putBoolean(
+                        BaseConstant.IS_AUTO_LOGIN_SCORE,
+                        viewModel.autoLoginLiveData.value!!
+                    )
+                    Log.d("gouxuan", "取消自动登陆")
+                }
+            }
+        }
 
 
 
 
-        viewModel.scoreFragmentState.observe(this, {
+        viewModel.scoreFragmentState.observe(this) {
             when (it) {
                 "open" -> {
 
                 }
             }
-        })
+        }
 
-        viewModel.buttonState.observe(this,
-            {
-                when (it) {
-                    "start_to_login" -> {
-                        binding.btnLogin.visibility = View.VISIBLE
-                        binding.progressBar.visibility = View.GONE
-                        binding.btnSuccess.visibility = View.GONE
-                    }
-                    "wrong_password" -> {
-                        binding.btnLogin.visibility = View.VISIBLE
-                        binding.progressBar.visibility = View.GONE
-                        binding.btnSuccess.visibility = View.GONE
-                        binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
-                    }
-                    "login_success" -> {
-                        binding.mushroom.setImageResource(R.drawable.mushroom)
+        viewModel.buttonState.observe(this
+        ) {
+            when (it) {
+                "start_to_login" -> {
+                    binding.btnLogin.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    binding.btnSuccess.visibility = View.GONE
+                }
+                "wrong_password" -> {
+                    binding.btnLogin.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    binding.btnSuccess.visibility = View.GONE
+                    binding.btnLogin.setIconResource(R.drawable.ic_baseline_refresh_24)
+                }
+                "login_success" -> {
+                    binding.mushroom.setImageResource(R.drawable.mushroom)
 
-                        AppPrefsUtils.putBoolean(
-                            BaseConstant.IS_REMEMBER_PASSWORD_SCORE,
-                            viewModel.rmPasswordLiveData.value!!
+                    AppPrefsUtils.putBoolean(
+                        BaseConstant.IS_REMEMBER_PASSWORD_SCORE,
+                        viewModel.rmPasswordLiveData.value!!
+                    )
+                    AppPrefsUtils.putBoolean(
+                        BaseConstant.IS_AUTO_LOGIN_SCORE,
+                        viewModel.autoLoginLiveData.value!!
+                    )
+
+                    /**
+                     * 判断是否记住密码
+                     */
+                    if (viewModel.rmPasswordLiveData.value!!) {
+                        AppPrefsUtils.putString(BaseConstant.NAME_SCORE, viewModel.name)
+                        AppPrefsUtils.putString(
+                            BaseConstant.PASSWORD_SCORE,
+                            viewModel.password
                         )
-                        AppPrefsUtils.putBoolean(
-                            BaseConstant.IS_AUTO_LOGIN_SCORE,
-                            viewModel.autoLoginLiveData.value!!
+                        Log.d(
+                            "gouxuan",
+                            "loginNwuStudent: 保存用户为${viewModel.name},密码为${viewModel.password}"
                         )
-
-                        /**
-                         * 判断是否记住密码
-                         */
-                        if (viewModel.rmPasswordLiveData.value!!) {
-                            AppPrefsUtils.putString(BaseConstant.NAME_SCORE, viewModel.name)
-                            AppPrefsUtils.putString(
-                                BaseConstant.PASSWORD_SCORE,
-                                viewModel.password
-                            )
-                            Log.d(
-                                "gouxuan",
-                                "loginNwuStudent: 保存用户为${viewModel.name},密码为${viewModel.password}"
-                            )
-                        } else {
-                            AppPrefsUtils.putString(BaseConstant.NAME_SCORE, "")
-                            AppPrefsUtils.putString(BaseConstant.PASSWORD_SCORE, "")
-                        }
+                    } else {
+                        AppPrefsUtils.putString(BaseConstant.NAME_SCORE, "")
+                        AppPrefsUtils.putString(BaseConstant.PASSWORD_SCORE, "")
+                    }
 //
-                        Handler(Looper.getMainLooper()).postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
 //                            把viewmodel的东西取出放入list
-                            scoreList = viewModel.scoreListLiveData.value!!
+                        scoreList = viewModel.scoreListLiveData.value!!
 
-                            Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
-                                .navigate(R.id.action_navigation_nwudoor_to_scroeFragment)
+                        Navigation.findNavController(context as Activity, R.id.nav_host_fragment)
+                            .navigate(R.id.action_navigation_nwudoor_to_scroeFragment)
 
-                        }, 800)
+                    }, 800)
 
 
-                        binding.btnLogin.visibility = View.GONE
-                        binding.progressBar.visibility = View.GONE
-                        binding.btnSuccess.apply {
-                            visibility = View.VISIBLE
-                            isChecked = true
-                            isClickable = false
-                        }
+                    binding.btnLogin.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
+                    binding.btnSuccess.apply {
+                        visibility = View.VISIBLE
+                        isChecked = true
+                        isClickable = false
                     }
                 }
-            })
+            }
+        }
 
 //        viewModel.cookieLiveData.observe(this,{
 //            Log.d("elementsScore", "searchScroe5: ${it}")
