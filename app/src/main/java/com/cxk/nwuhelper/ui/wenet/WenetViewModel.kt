@@ -55,9 +55,9 @@ class WenetViewModel(netSpBean: NetSpBean) : ViewModel() {
                 Log.e("test123", "getIpAddressByWifi,$IpAddressByWifi")
 
 //                IpAddressByWifi.showToast(context)
-                if("10.1" in IpAddressByWifi){
+                if ("10.1" in IpAddressByWifi) {
                     buttonState.postValue("wifi_available")
-                }else{
+                } else {
                     buttonState.postValue("wifi_not_available")
                 }
 
@@ -150,7 +150,8 @@ class WenetViewModel(netSpBean: NetSpBean) : ViewModel() {
 
         //根据ip修改连接
         var url =
-            "http://10.16.0.12:8081/?usermac=XX:XX:XX:XX:XX:XX&userip=MYIP&origurl=http://edge.microsoft.com/captiveportal/generate_204&nasip=10.100.0.1"
+            "http://10.16.0.21:80/?usermac=XX:XX:XX:XX:XX:XX&userip=MYIP&origurl=http://edge.microsoft.com/captiveportal/generate_204&nasip=10.100.0.1"
+//            "http://10.16.0.12:8081/?usermac=XX:XX:XX:XX:XX:XX&userip=MYIP&origurl=http://edge.microsoft.com/captiveportal/generate_204&nasip=10.100.0.1"
         url = url.replace("MYIP", IpAddressByWifi)
 
         val loginPostBody = LoginPostBody(
